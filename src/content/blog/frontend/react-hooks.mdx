@@ -1,0 +1,130 @@
+---
+title: 'React Hooks深入解析'
+date: '2023-05-05'
+category: 'frontend'
+tags: ['React', 'JavaScript', 'Hooks']
+excerpt: 'React Hooks允许你在不使用类组件的情况下使用状态和其他React特性。本文将深入探讨useState、useEffect等钩子的使用方法和最佳实践。'
+---
+
+{/* @format */}
+
+import { Callout } from '@/components/ui/callout'
+
+# React Hooks 深入解析
+
+React Hooks 是 React 16.8 中引入的新特性，它允许你在不编写 class 的情况下使用 state 和其他 React 特性。
+
+<Callout type="info">
+    Hooks 是完全可选的。你可以继续使用类组件，无需重写任何现有代码。但是，Hooks
+    提供了一种更直接的 API 来使用 React 特性。
+</Callout>
+
+## 为什么需要 Hooks？
+
+React 团队创建 Hooks 的动机主要有以下几点：
+
+-   **在组件之间复用状态逻辑很难**：React 没有提供将可复用行为"附加"到组件的途径，而 Hooks 提供了一种机制。
+-   **复杂组件变得难以理解**：组件常常在 componentDidMount 和 componentDidUpdate 中包含相互关联但必须分开的代码。
+-   **难以理解的 class**：class 在 JavaScript 中的工作方式与其他语言有所不同，增加了学习成本。
+
+## 常用 Hooks 详解
+
+### useState
+
+`useState`是最基本的 Hook，它让你在函数组件中添加本地状态。
+
+```jsx
+import React, { useState } from 'react'
+
+function Counter() {
+    // 声明一个叫"count"的state变量，初始值为0
+    const [count, setCount] = useState(0)
+
+    return (
+        <div>
+            <p>你点击了{count}次</p>
+            <button onClick={() => setCount(count + 1)}>点击我</button>
+        </div>
+    )
+}
+```
+
+### useEffect
+
+`useEffect`允许你在函数组件中执行副作用操作，例如数据获取、订阅或手动修改 DOM 等。
+
+```jsx
+import React, { useState, useEffect } from 'react'
+
+function ExampleWithEffect() {
+    const [count, setCount] = useState(0)
+
+    // 类似于componentDidMount和componentDidUpdate:
+    useEffect(() => {
+        // 更新文档标题
+        document.title = `你点击了${count}次`
+
+        // 返回一个清理函数
+        return () => {
+            document.title = 'React App'
+        }
+    }, [count]) // 仅在count更改时重新运行
+
+    return (
+        <div>
+            <p>你点击了{count}次</p>
+            <button onClick={() => setCount(count + 1)}>点击我</button>
+        </div>
+    )
+}
+```
+
+## 自定义 Hooks
+
+自定义 Hooks 允许你将组件逻辑提取到可重用的函数中。
+
+```jsx
+import { useState, useEffect } from 'react'
+
+function useWindowSize() {
+    // 初始化宽高为0
+    const [windowSize, setWindowSize] = useState({
+        width: undefined,
+        height: undefined
+    })
+
+    useEffect(() => {
+        // 处理窗口大小变化的函数
+        function handleResize() {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            })
+        }
+
+        // 添加事件监听
+        window.addEventListener('resize', handleResize)
+
+        // 初始调用一次
+        handleResize()
+
+        // 清理事件监听
+        return () => window.removeEventListener('resize', handleResize)
+    }, []) // 空依赖数组意味着只在挂载和卸载时运行
+
+    return windowSize
+}
+```
+
+## Hooks 使用规则
+
+使用 Hooks 有两个重要的规则：
+
+1. **只在最顶层使用 Hooks**：不要在循环、条件或嵌套函数中调用 Hook。
+2. **只在 React 函数中调用 Hooks**：只在 React 函数组件和自定义 Hook 中调用 Hooks。
+
+## 结论
+
+React Hooks 提供了一种全新的方式来思考 React 组件，让我们可以以更加函数式的方式编写组件，提高代码的可读性和可维护性。虽然 Hooks 不是取代 class 组件，但它们提供了一种更简洁的方式来表达组件的行为和状态。
+
+随着对 Hooks 的深入理解，你会发现它们可以显著简化你的 React 代码，使组件的逻辑更加清晰和可复用。
