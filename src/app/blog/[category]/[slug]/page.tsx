@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { CategoryNav } from '@/components/blog/CategoryNav'
 import MDXContent from '@/components/blog/MDXContent'
 import { Badge } from '@/components/ui/badge'
 import TableOfContents from '@/components/blog/TableOfContents'
@@ -93,15 +92,16 @@ const BlogPostPage = async ({
     return (
         <div className="container mx-auto">
             <div className="flex flex-col lg:flex-row py-6 gap-10">
-                {/* 左侧分类导航 */}
-                <div className="hidden lg:block w-64 shrink-0 space-y-6">
-                    <div className="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] scrollbar-hide">
-                        <h3 className="text-xl font-semibold mb-4">分类</h3>
-                        <CategoryNav categories={categories} />
+                <div className="hidden lg:block w-64 shrink-0">
+                    <div className="sticky top-20 max-h-[calc(100vh-5rem)]">
+                        {headings.length > 0 && (
+                            <TableOfContents
+                                headings={headings}
+                                contentContainerId="blog-content"
+                            />
+                        )}
                     </div>
                 </div>
-
-                {/* 中间内容区 - 可独立滚动但隐藏滚动条 */}
                 <div className="flex-1 min-w-0">
                     <div
                         id="blog-content"
@@ -144,18 +144,6 @@ const BlogPostPage = async ({
                                 slug={post.slug}
                             />
                         </article>
-                    </div>
-                </div>
-
-                {/* 右侧目录 */}
-                <div className="hidden lg:block w-64 shrink-0">
-                    <div className="sticky top-20 max-h-[calc(100vh-5rem)]">
-                        {headings.length > 0 && (
-                            <TableOfContents
-                                headings={headings}
-                                contentContainerId="blog-content"
-                            />
-                        )}
                     </div>
                 </div>
             </div>

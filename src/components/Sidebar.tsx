@@ -14,7 +14,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from '@/components/ui/sidebar'
-
 // Menu items.
 
 const items = [
@@ -76,13 +75,20 @@ export function CustomTrigger() {
     const { toggleSidebar } = useSidebar()
 
     return (
-        <Image
+        <div
+            className="flex fixed items-center cursor-pointer"
             onClick={toggleSidebar}
-            src="/toggle.svg"
-            alt="Toggle Sidebar"
-            width={36}
-            height={36}
-            className="fixed cursor-pointer  transition-transform duration-200 ease-in-out hover:rotate-180 hover:scale-110"
-        />
+        >
+            <Image
+                src="/toggle.svg"
+                alt="Toggle Sidebar"
+                width={36}
+                height={36}
+                className=" transition-transform duration-200 ease-in-out hover:rotate-180 hover:scale-110"
+            />
+            <p className="font-semibold text-lg bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 bg-clip-text text-transparent bg-[length:200%_auto] animate-pulse">
+                fluxp
+            </p>
+        </div>
     )
 }
