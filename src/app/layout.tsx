@@ -3,8 +3,8 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import { Navigation } from '@/components/Navigation'
-
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { AppSidebar, CustomTrigger } from '@/components/Sidebar'
 const geistSans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin']
@@ -39,8 +39,13 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-gray-50`}
             >
-                <Navigation />
-                <div className="flex-grow">{children}</div>
+                <SidebarProvider>
+                    <AppSidebar />
+                    <main className="flex-grow">
+                        <CustomTrigger />
+                        {children}
+                    </main>
+                </SidebarProvider>
             </body>
         </html>
     )

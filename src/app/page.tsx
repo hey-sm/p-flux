@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  return (
+    return (
         <main className="container mx-auto px-4 py-12">
             <section className="text-center mb-16">
                 <h1 className="text-5xl font-bold mb-6">欢迎来到 P-Flux</h1>
@@ -116,7 +116,7 @@ export default function HomePage() {
                                     <Calendar className="mr-1 h-3 w-3" />
                                     2023年5月15日
                                 </div>
-        </div>
+                            </div>
                             <CardTitle className="mt-2">
                                 <Link
                                     href="/blog/example-post"
@@ -186,7 +186,7 @@ export default function HomePage() {
                             </Button>
                         </CardFooter>
                     </Card>
-    </div>
+                </div>
             </section>
         </main>
     )
