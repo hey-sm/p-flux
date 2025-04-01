@@ -8,7 +8,7 @@
     },
     "scripts": {
         "preinstall": "npx only-allow pnpm",
-        "dev": "next dev",
+        "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
         "lint": "next lint"
@@ -26,6 +26,8 @@
         "clsx": "^2.1.1",
         "lucide-react": "^0.483.0",
         "next": "15.2.4",
+        "nextra": "^4.2.17",
+        "nextra-theme-docs": "^4.2.17",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "tailwind-merge": "^3.0.2",
