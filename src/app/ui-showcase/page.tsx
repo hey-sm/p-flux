@@ -1,12 +1,6 @@
 /** @format */
 
-import { Metadata } from 'next'
 import Link from 'next/link'
-
-export const metadata: Metadata = {
-    title: '组件特效 | P-Flux',
-    description: '探索各种精美的UI组件和交互特效展示'
-}
 
 // 模拟组件数据
 const components = [

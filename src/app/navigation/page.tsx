@@ -1,12 +1,6 @@
 /** @format */
 
-import { Metadata } from 'next'
 import Link from 'next/link'
-
-export const metadata: Metadata = {
-    title: '网站导航 | P-Flux',
-    description: '精选的网站资源导航，帮助您发现有价值的内容'
-}
 
 // 模拟网站导航数据
 const categories = [
