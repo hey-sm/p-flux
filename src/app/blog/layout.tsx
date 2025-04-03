@@ -33,7 +33,6 @@ export default async function RootLayout({
             navbar={navbar}
             pageMap={blogPage}
             docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
-            footer={{ component: <></> }} // 移除右下角图标
         >
             {children}
         </Layout>
