@@ -3,9 +3,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { AppSidebar, CustomTrigger } from '@/components/Sidebar'
-
+import { Navbar } from '@/components/Navbar'
 const geistSans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin']
@@ -62,16 +60,11 @@ export default async function RootLayout({
 }>) {
     return (
         <html lang="zh-CN">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-gray-50`}
-            >
-                <SidebarProvider>
-                    <AppSidebar />
-                    <main className="flex-grow">
-                        <CustomTrigger />
-                        {children}
-                    </main>
-                </SidebarProvider>
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+                <div className="flex justify-end">
+                    <Navbar />
+                </div>
+                {children}
             </body>
         </html>
     )

@@ -20,9 +20,5 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-    return (
-        <main className="container mx-auto px-4 py-12">
-            <h6>fluxp</h6>
-        </main>
-    )
+    return <h6>fluxp</h6>
 }
