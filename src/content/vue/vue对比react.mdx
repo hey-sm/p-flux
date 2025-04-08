@@ -22,7 +22,7 @@ React 的核心理念是"UI 即函数"，它将 UI 视为数据的一种展现�
 
 ```jsx
 function Welcome(props) {
-    return <h1>Hello, {props.name}</h1>
+  return <h1>Hello, {props.name}</h1>;
 }
 ```
 
@@ -32,13 +32,13 @@ Vue 将自己定位为渐进式框架，意味着你可以逐步采用它，根�
 
 ```vue
 <template>
-    <h1>Hello, {{ name }}</h1>
+  <h1>Hello, {{ name }}</h1>
 </template>
 
 <script>
 export default {
-    props: ['name']
-}
+  props: ["name"],
+};
 </script>
 ```
 
@@ -50,14 +50,14 @@ React 使用 JSX，一种 JavaScript 的语法扩展，将 HTML 与 JavaScript �
 
 ```jsx
 function Counter() {
-    const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
-    return (
-        <div>
-            <p>Count: {count}</p>
-            <button onClick={() => setCount(count + 1)}>Increment</button>
-        </div>
-    )
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
 }
 ```
 
@@ -67,25 +67,25 @@ Vue 使用基于 HTML 的模板语法，加上单文件组件(SFC)的概念：
 
 ```vue
 <template>
-    <div>
-        <p>Count: {{ count }}</p>
-        <button @click="increment">Increment</button>
-    </div>
+  <div>
+    <p>Count: {{ count }}</p>
+    <button @click="increment">Increment</button>
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            count: 0
-        }
+  data() {
+    return {
+      count: 0,
+    };
+  },
+  methods: {
+    increment() {
+      this.count++;
     },
-    methods: {
-        increment() {
-            this.count++
-        }
-    }
-}
+  },
+};
 </script>
 ```
 
@@ -97,15 +97,15 @@ React 采用单向数据流，当状态变化时，会重新渲染组件树：
 
 ```jsx
 function Example() {
-    // 声明一个新的state变量
-    const [count, setCount] = useState(0)
+  // 声明一个新的state变量
+  const [count, setCount] = useState(0);
 
-    return (
-        <div>
-            <p>You clicked {count} times</p>
-            <button onClick={() => setCount(count + 1)}>Click me</button>
-        </div>
-    )
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
 }
 ```
 
@@ -115,21 +115,21 @@ Vue 提供了真正的响应式系统，通过依赖跟踪自动更新 DOM：
 
 ```vue
 <template>
-    <div>
-        <p>You clicked {{ count }} times</p>
-        <button @click="count++">Click me</button>
-    </div>
+  <div>
+    <p>You clicked {{ count }} times</p>
+    <button @click="count++">Click me</button>
+  </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 export default {
-    setup() {
-        const count = ref(0)
-        return { count }
-    }
-}
+  setup() {
+    const count = ref(0);
+    return { count };
+  },
+};
 </script>
 ```
 
@@ -141,16 +141,16 @@ React 常用的状态管理解决方案包括 Redux、Context API 和 Zustand �
 
 ```jsx
 // 使用Context API
-const CountContext = createContext()
+const CountContext = createContext();
 
 function CountProvider({ children }) {
-    const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
-    return (
-        <CountContext.Provider value={{ count, setCount }}>
-            {children}
-        </CountContext.Provider>
-    )
+  return (
+    <CountContext.Provider value={{ count, setCount }}>
+      {children}
+    </CountContext.Provider>
+  );
 }
 ```
 
@@ -160,16 +160,16 @@ Vue 则有 Vuex 和更现代的 Pinia 作为状态管理方案：
 
 ```javascript
 // Pinia示例
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useCounterStore = defineStore('counter', {
-    state: () => ({ count: 0 }),
-    actions: {
-        increment() {
-            this.count++
-        }
-    }
-})
+export const useCounterStore = defineStore("counter", {
+  state: () => ({ count: 0 }),
+  actions: {
+    increment() {
+      this.count++;
+    },
+  },
+});
 ```
 
 ## 路由管理
@@ -177,32 +177,32 @@ export const useCounterStore = defineStore('counter', {
 React 有 React Router:
 
 ```jsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-            </Routes>
-        </BrowserRouter>
-    )
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 ```
 
 Vue 有 Vue Router:
 
 ```javascript
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        { path: '/', component: Home },
-        { path: '/about', component: About }
-    ]
-})
+  history: createWebHistory(),
+  routes: [
+    { path: "/", component: Home },
+    { path: "/about", component: About },
+  ],
+});
 ```
 
 ## 性能对比
@@ -245,38 +245,38 @@ React 拥有由 Facebook 支持的庞大社区和丰富的第三方库。Vue 虽
 React 版本:
 
 ```jsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 function UserList() {
-    const [users, setUsers] = useState([])
-    const [filter, setFilter] = useState('')
+  const [users, setUsers] = useState([]);
+  const [filter, setFilter] = useState("");
 
-    useEffect(() => {
-        fetch('/api/users')
-            .then((res) => res.json())
-            .then((data) => setUsers(data))
-    }, [])
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => setUsers(data));
+  }, []);
 
-    const filteredUsers = users.filter((user) =>
-        user.name.toLowerCase().includes(filter.toLowerCase())
-    )
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
-    return (
-        <div>
-            <input
-                type="text"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                placeholder="Filter users..."
-            />
+  return (
+    <div>
+      <input
+        type="text"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        placeholder="Filter users..."
+      />
 
-            <ul>
-                {filteredUsers.map((user) => (
-                    <li key={user.id}>{user.name}</li>
-                ))}
-            </ul>
-        </div>
-    )
+      <ul>
+        {filteredUsers.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 ```
 
@@ -284,33 +284,33 @@ Vue 版本:
 
 ```vue
 <template>
-    <div>
-        <input v-model="filter" type="text" placeholder="Filter users..." />
+  <div>
+    <input v-model="filter" type="text" placeholder="Filter users..." />
 
-        <ul>
-            <li v-for="user in filteredUsers" :key="user.id">
-                {{ user.name }}
-            </li>
-        </ul>
-    </div>
+    <ul>
+      <li v-for="user in filteredUsers" :key="user.id">
+        {{ user.name }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from "vue";
 
-const users = ref([])
-const filter = ref('')
+const users = ref([]);
+const filter = ref("");
 
 onMounted(async () => {
-    const res = await fetch('/api/users')
-    users.value = await res.json()
-})
+  const res = await fetch("/api/users");
+  users.value = await res.json();
+});
 
 const filteredUsers = computed(() =>
-    users.value.filter((user) =>
-        user.name.toLowerCase().includes(filter.value.toLowerCase())
-    )
-)
+  users.value.filter((user) =>
+    user.name.toLowerCase().includes(filter.value.toLowerCase())
+  )
+);
 </script>
 ```
 
