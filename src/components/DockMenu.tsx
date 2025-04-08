@@ -72,12 +72,11 @@ function DockMenuContent() {
     </div>
   );
 }
-// 浮动容器组件
+// 浮动容器组件 - 简化版
 function FloatingContainer({ children }: { children: React.ReactNode }) {
   const [isVisible, setIsVisible] = useState(false);
   const throttleRef = useRef<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // 检测设备类型
@@ -93,11 +92,7 @@ function FloatingContainer({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // 定义触发区域尺寸 (仅桌面端使用)
-  const triggerWidth = 400;
-  const triggerHeight = 100;
-
-  // 处理桌面端鼠标移动
+  // 桌面端：鼠标悬停区域处理
   const handleMouseMovement = useCallback(
     (e: MouseEvent) => {
       if (isMobile || throttleRef.current !== null) return;
@@ -105,9 +100,9 @@ function FloatingContainer({ children }: { children: React.ReactNode }) {
       throttleRef.current = window.requestAnimationFrame(() => {
         const windowCenterX = window.innerWidth / 2;
         const isInTriggerZone =
-          e.clientX >= windowCenterX - triggerWidth / 2 &&
-          e.clientX <= windowCenterX + triggerWidth / 2 &&
-          e.clientY <= triggerHeight;
+          e.clientX >= windowCenterX - 200 &&
+          e.clientX <= windowCenterX + 200 &&
+          e.clientY <= 100;
 
         setIsVisible(isInTriggerZone);
         throttleRef.current = null;
@@ -116,36 +111,25 @@ function FloatingContainer({ children }: { children: React.ReactNode }) {
     [isMobile]
   );
 
-  // 处理移动端指示条点击
-  function handleIndicatorClick() {
-    setIsVisible(true);
-  }
+  // 移动端：点击指示条显示，点击外部关闭
+  const toggleMenu = () => setIsVisible(true);
 
-  // 监听点击事件，检测是否点击菜单外部
+  // 处理点击外部关闭
   useEffect(() => {
     if (!isMobile || !isVisible) return;
 
     const handleOutsideClick = (e: MouseEvent) => {
-      if (!menuRef.current) return;
-
-      // 检查点击是否在菜单区域外
-      if (!menuRef.current.contains(e.target as Node)) {
+      if (!menuRef.current?.contains(e.target as Node)) {
         setIsVisible(false);
       }
     };
 
-    // 延迟添加事件监听，避免点击指示条立即触发关闭
-    const timer = setTimeout(() => {
-      document.addEventListener("click", handleOutsideClick, true);
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
+    document.addEventListener("click", handleOutsideClick, true);
+    return () =>
       document.removeEventListener("click", handleOutsideClick, true);
-    };
-  }, [isVisible, isMobile]);
+  }, [isMobile, isVisible]);
 
-  // 注册鼠标移动事件监听
+  // 仅桌面端添加鼠标移动事件
   useEffect(() => {
     if (!isMobile) {
       window.addEventListener("mousemove", handleMouseMovement, {
@@ -162,7 +146,8 @@ function FloatingContainer({ children }: { children: React.ReactNode }) {
   }, [handleMouseMovement, isMobile]);
 
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <>
+      {/* Dock菜单 */}
       <motion.div
         ref={menuRef}
         initial={false}
@@ -180,34 +165,27 @@ function FloatingContainer({ children }: { children: React.ReactNode }) {
           "fixed top-0 left-0 right-0 z-50",
           "flex justify-center items-center",
           "py-2 bg-background/80 backdrop-blur-sm",
-          "transition-[backdrop-filter]",
           isVisible ? "pointer-events-auto" : "pointer-events-none"
         )}
         style={{
           willChange: "transform, opacity",
           backfaceVisibility: "hidden",
-          WebkitFontSmoothing: "antialiased",
         }}
       >
         {children}
       </motion.div>
 
-      {/* 移动端指示条 - 点击展开 */}
+      {/* 移动端指示条 - 仅小横条部分点击展开 */}
       {isMobile && (
-        <div
-          onClick={handleIndicatorClick}
-          className={cn(
-            "fixed top-0 left-0 right-0 z-40",
-            "flex justify-center items-center",
-            "h-8 cursor-pointer active:bg-slate-100/10",
-            isVisible ? "pointer-events-none" : "pointer-events-auto"
-          )}
-          style={{ WebkitTapHighlightColor: "transparent" }}
-        >
-          <div className="w-16 h-1.5 bg-slate-400/50 rounded-full mt-3" />
+        <div className="fixed top-0 left-0 right-0 z-40 flex justify-center items-center h-8 pointer-events-none">
+          <div
+            onClick={toggleMenu}
+            className="w-16 h-1.5 bg-slate-400/50 rounded-full mt-3 cursor-pointer pointer-events-auto"
+            style={{ WebkitTapHighlightColor: "transparent" }}
+          ></div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 // 导出的主组件

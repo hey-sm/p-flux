@@ -52,7 +52,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html
+      className="light"
+      style={{ colorScheme: "light" }}
+      suppressHydrationWarning
+    >
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <div className="flex justify-center">
           <DockMenu />

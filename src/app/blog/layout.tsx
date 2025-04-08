@@ -2,9 +2,11 @@
 
 import type { Metadata } from "next";
 import { Layout, Navbar } from "nextra-theme-docs";
-import { Banner, Head, Search } from "nextra/components";
+import { Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
+import Image from "next/image";
+import "./index.css";
 
 // 定义页面结构的接口
 interface PageData {
@@ -20,13 +22,25 @@ export const metadata: Metadata = {
   keywords: ["fluxp", "fluxp blog", "技术博客", "前端开发"],
 };
 
-const navbar = (
-  <Navbar
-    logo={<b>fluxp Blog</b>}
-    projectLink="https://github.com/hey-sm/p-flux"
+const Logo = () => (
+  <div className="flex items-center gap-2">
+    <Image
+      src="/favicon.svg"
+      alt="fluxp logo"
+      width={24}
+      height={24}
+      className="dark:invert"
+    />
+    <span className="font-bold">fluxp</span>
+  </div>
+);
+const navbar = <Navbar logo={<Logo />} />;
+const search = (
+  <Search
+    placeholder="🔍"
+    className="[&_input:focus]:border-indigo-300 [&_input:focus]:border [&_input:focus]:outline-none"
   />
 );
-const search = <Search placeholder="🔍" />;
 const pageMap = (await getPageMap()) as PageData[];
 const blogPage = pageMap.find((page) => page.route === "/blog")?.children || [];
 
@@ -45,7 +59,8 @@ export default async function RootLayout({
       navbar={navbar}
       search={search}
       pageMap={blogPage}
-      docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
+      sidebar={{ defaultMenuCollapseLevel: 1 }}
+      docsRepositoryBase="https://github.com/hey-sm/p-flux/blob/main"
     >
       {children}
     </Layout>
