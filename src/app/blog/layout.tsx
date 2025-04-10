@@ -17,7 +17,7 @@ interface PageData {
 }
 
 export const metadata: Metadata = {
-  title: "fluxp Blog - 知识分享与技术探索",
+  title: "fluxp Blog",
   description: "fluxp的博客，分享前端、后端开发经验和技巧",
   keywords: ["fluxp", "fluxp blog", "技术博客", "前端开发"],
 };
