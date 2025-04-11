@@ -61,6 +61,7 @@ export default async function RootLayout({
       pageMap={blogPage}
       sidebar={{ defaultMenuCollapseLevel: 1 }}
       docsRepositoryBase="https://github.com/hey-sm/p-flux/blob/main"
+      toc={{ backToTop: <span>返回顶部</span> }}
     >
       {children}
     </Layout>
