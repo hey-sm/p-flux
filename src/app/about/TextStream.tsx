@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ResponseStream } from "@/components/ui/response-stream";
 import quotesData from "@/app/about/quotes.json";
-
+import { LampContainer } from "@/components/ui/lamp";
 export default function TextStream() {
   const [quote, setQuote] = useState({ text: "", author: "" });
   const [showAuthor, setShowAuthor] = useState(false);
@@ -42,32 +42,34 @@ export default function TextStream() {
   }, []);
 
   return (
-    <div
-      className="
+    <LampContainer key={key}>
+      <div
+        className="
           flex flex-col items-center justify-center
-          w-full max-w-3xl mx-auto 
-          italic  md:text-lg text-gray-400 
+          w-full max-w-3xl mx-auto min-h-[200px]
+          italic md:text-lg text-gray-400 
           px-5 md:px-6
         "
-      onClick={getNextQuote}
-    >
-      <ResponseStream
-        key={`quote-${key}`}
-        textStream={quote.text}
-        className="whitespace-pre-wrap  hover:cursor-pointer select-none mb-2"
-        speed={5}
-        onComplete={handleQuoteComplete}
-      />
-      {showAuthor && quote.author && (
-        <div className="text-right w-full">
+        onClick={getNextQuote}
+      >
+        <div className="flex items-center justify-center w-full">
           <ResponseStream
-            key={`author-${key}`}
-            textStream={"-- " + quote.author}
-            className="hover:cursor-pointer select-none inline-block"
+            textStream={quote.text}
+            className="whitespace-pre-wrap hover:cursor-pointer select-none mb-2"
             speed={5}
+            onComplete={handleQuoteComplete}
           />
         </div>
-      )}
-    </div>
+        {showAuthor && quote.author && (
+          <div className="text-right w-full">
+            <ResponseStream
+              textStream={"-- " + quote.author}
+              className="hover:cursor-pointer select-none inline-block"
+              speed={5}
+            />
+          </div>
+        )}
+      </div>
+    </LampContainer>
   );
 }
