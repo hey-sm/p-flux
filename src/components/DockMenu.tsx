@@ -21,6 +21,11 @@ const menuItems = [
     icon: "icon-[lucide--inbox]",
   },
   {
+    title: "书籍阅读",
+    url: "/books",
+    icon: "icon-[lucide--book-open]",
+  },
+  {
     title: "组件特效",
     url: "/ui-showcase",
     icon: "icon-[lucide--calendar]",
