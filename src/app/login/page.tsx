@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 
-export default function LoginPage() {
+// 将使用useSearchParams的部分抽离为单独组件
+function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,29 +43,38 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-72">
-        {error && (
-          <div className="mb-4 text-red-600 text-center text-sm">{error}</div>
+    <div className="w-72">
+      {error && (
+        <div className="mb-4 text-red-600 text-center text-sm">{error}</div>
+      )}
+      <form onSubmit={handleSubmit}>
+        <Input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="请输入管理员密码"
+          required
+          autoFocus
+          className="text-center h-10"
+          disabled={loading}
+        />
+        {loading && (
+          <div className="mt-2 text-center text-sm text-gray-500">
+            验证中...
+          </div>
         )}
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="请输入管理员密码"
-            required
-            autoFocus
-            className="text-center h-10"
-            disabled={loading}
-          />
-          {loading && (
-            <div className="mt-2 text-center text-sm text-gray-500">
-              验证中...
-            </div>
-          )}
-        </form>
-      </div>
+      </form>
+    </div>
+  );
+}
+
+// 主页面组件使用Suspense包裹LoginForm
+export default function LoginPage() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <Suspense fallback={<div className="w-72 text-center">加载中...</div>}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }
