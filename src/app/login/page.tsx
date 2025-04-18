@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-
+import { Ripple } from "@/components/magicui/ripple";
 // 将使用useSearchParams的部分抽离为单独组件
 function LoginForm() {
   const [password, setPassword] = useState("");
@@ -44,7 +44,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-72">
+    <div className="w-42">
       {error && (
         <div className="mb-4 text-red-600 text-center text-sm">{error}</div>
       )}
@@ -74,7 +74,10 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Suspense fallback={<div className="w-72 text-center">加载中...</div>}>
-        <LoginForm />
+        <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
+          <LoginForm />
+          <Ripple />
+        </div>
       </Suspense>
     </div>
   );

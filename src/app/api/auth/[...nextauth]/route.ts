@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-// 从环境变量获取密码，或使用默认值
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ppppp";
+// 从环境变量获取密码
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // 定义NextAuth处理程序
 const handler = NextAuth({

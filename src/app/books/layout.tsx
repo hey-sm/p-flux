@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { BooksProvider, useBooks } from "./BooksContext";
-import AnimatedList from "@/components/AnimatedList";
+import AnimatedList from "@/components/21-st/AnimatedList";
 
 // 格式化文件大小的函数
 const formatFileSize = (bytes?: number): string => {
