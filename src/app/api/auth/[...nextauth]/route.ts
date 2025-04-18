@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 // 从环境变量获取密码，或使用默认值
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "flux";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ppppp";
 
 // 定义NextAuth处理程序
 const handler = NextAuth({
@@ -45,6 +45,7 @@ const handler = NextAuth({
     strategy: "jwt",
     maxAge: 24 * 60 * 60, // 24小时
   },
+  debug: process.env.NODE_ENV === "development",
 });
 
 // 导出GET和POST处理程序

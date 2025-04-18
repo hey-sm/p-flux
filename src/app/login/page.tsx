@@ -29,8 +29,9 @@ function LoginForm() {
         throw new Error("密码错误");
       }
 
-      // 登录成功，重定向到管理页面
-      router.push(callbackUrl);
+      // 使用window.location直接跳转，而不是使用router
+      // 这样可以确保在生产环境中重定向正常工作
+      window.location.href = callbackUrl;
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
