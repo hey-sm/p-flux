@@ -1,11 +1,11 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
 
 // 从环境变量获取密码，或使用默认值
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "flux'";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "flux";
 
-export const authOptions: NextAuthOptions = {
+// 定义NextAuth处理程序
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       id: "admin-login",
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }) {
       if (session.user) {
         // 添加角色到会话用户对象
-        (session.user as { role?: string }).role = token.role;
+        (session.user as { role?: string }).role = token.role as string;
       }
       return session;
     },
@@ -43,9 +43,9 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 72 * 60 * 60, // 72小时
+    maxAge: 24 * 60 * 60, // 24小时
   },
-};
+});
 
-const handler = NextAuth(authOptions);
+// 导出GET和POST处理程序
 export { handler as GET, handler as POST };
