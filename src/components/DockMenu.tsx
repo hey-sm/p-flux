@@ -40,6 +40,11 @@ const menuItems = [
     url: "/about",
     icon: "icon-[lucide--user]",
   },
+  {
+    title: "admin",
+    url: "/admin",
+    icon: "icon-[lucide--settings]",
+  },
 ];
 
 // 主菜单组件

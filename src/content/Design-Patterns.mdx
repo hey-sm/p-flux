@@ -1,0 +1,928 @@
+---
+title: 设计模式
+date: 2025-4-9
+author: ppppp
+category: vue
+excerpt: Vue 的设计思想
+slug: vue-vs-react
+tags: [Vue, Vue 的设计思想]
+---
+
+
+
+## 创建型设计模式（Creational Patterns）
+
+#### 1. 单例模式
+
+确保一个类只有一个实例，并提供一个全局访问点。
+
+**示例 1：全局状态管理**
+
+```js
+// store.js
+let instance = null;
+class Store {
+  constructor() {
+    if (instance) return instance;
+    this.state = {};
+    instance = this;
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+  }
+}
+
+const store = new Store();
+export default store;
+```
+
+**示例 2：配置管理器**
+
+```js
+class Config {
+  constructor() {
+    if (Config.instance) return Config.instance;
+    this.config = {};
+    Config.instance = this;
+  }
+
+  set(key, value) {
+    this.config[key] = value;
+  }
+
+  get(key) {
+    return this.config[key];
+  }
+}
+export default new Config();
+```
+
+---
+
+#### 2. 工厂模式
+
+定义一个用于创建对象的接口，让子类决定实例化哪一个类。
+
+**示例 1：组件工厂**
+
+```js
+function componentFactory(type) {
+  switch (type) {
+    case "button":
+      return <button>Click</button>;
+    case "input":
+      return <input />;
+    default:
+      return <div>Unknown</div>;
+  }
+}
+```
+
+**示例 2：图表工厂**
+
+```js
+function createChart(type) {
+  switch (type) {
+    case "bar":
+      return new BarChart();
+    case "line":
+      return new LineChart();
+    default:
+      throw new Error("Unknown chart type");
+  }
+}
+```
+
+---
+
+#### 3. 抽象工厂模式
+
+提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。
+
+**示例 1：主题切换**
+
+```js
+class LightThemeFactory {
+  createButton() {
+    return <button className="light">Light Button</button>;
+  }
+}
+
+class DarkThemeFactory {
+  createButton() {
+    return <button className="dark">Dark Button</button>;
+  }
+}
+```
+
+**示例 2：跨平台组件**
+
+```js
+class WebUIFactory {
+  createModal() {
+    return <div className="web-modal">Web Modal</div>;
+  }
+}
+
+class MobileUIFactory {
+  createModal() {
+    return <div className="mobile-modal">Mobile Modal</div>;
+  }
+}
+```
+
+---
+
+#### 4. 建造者模式
+
+将一个复杂对象的构建与其表示分离，使同样的构建过程可以创建不同的表示。
+
+**示例 1：表单构建器**
+
+```js
+class FormBuilder {
+  constructor() {
+    this.form = [];
+  }
+
+  addInput(name) {
+    this.form.push(`<input name="${name}" />`);
+    return this;
+  }
+
+  addButton(label) {
+    this.form.push(`<button>${label}</button>`);
+    return this;
+  }
+
+  build() {
+    return this.form.join("");
+  }
+}
+```
+
+**示例 2：HTML 元素构建器**
+
+```js
+class HtmlBuilder {
+  constructor(tag) {
+    this.tag = tag;
+    this.attrs = {};
+    this.children = [];
+  }
+
+  setAttribute(key, value) {
+    this.attrs[key] = value;
+    return this;
+  }
+
+  appendChild(child) {
+    this.children.push(child);
+    return this;
+  }
+
+  build() {
+    const attrs = Object.entries(this.attrs)
+      .map(([k, v]) => `${k}="${v}"`)
+      .join(" ");
+    const children = this.children.join("");
+    return `<${this.tag} ${attrs}>${children}</${this.tag}>`;
+  }
+}
+```
+
+---
+
+#### 5. 原型模式
+
+用原型实例指定创建对象的种类，并通过复制这些原型创建新的对象。
+
+**示例 1：表单模板复制**
+
+```js
+const formTemplate = {
+  fields: ["name", "email"],
+  validations: true,
+  clone() {
+    return JSON.parse(JSON.stringify(this));
+  },
+};
+
+const newForm = formTemplate.clone();
+```
+
+**示例 2：组件配置复制**
+
+```js
+const buttonPrototype = {
+  type: "button",
+  style: { color: "blue" },
+  onClick: () => alert("clicked"),
+  clone() {
+    return { ...this };
+  },
+};
+
+const newButton = buttonPrototype.clone();
+```
+
+---
+
+## 结构型设计模式（Structural Patterns）
+
+#### 1. 适配器模式
+
+将一个类的接口转换成客户端期望的接口，使原本由于接口不兼容而不能一起工作的类可以协同工作。
+
+**示例 1：封装第三方库接口**
+
+```js
+// 假设我们使用的是一个老旧图表库 OldChart
+class OldChart {
+  drawPie(data) {
+    console.log("Drawing pie chart", data);
+  }
+}
+
+// 适配器封装
+class ChartAdapter {
+  constructor() {
+    this.chart = new OldChart();
+  }
+
+  render(data) {
+    this.chart.drawPie(data);
+  }
+}
+```
+
+**示例 2：统一 API 响应格式**
+
+```js
+function apiAdapter(response) {
+  return {
+    code: response.status,
+    data: response.payload,
+    message: response.msg,
+  };
+}
+```
+
+---
+
+#### 2. 装饰器模式
+
+动态地给对象添加额外的职责，是继承的替代方案。
+
+**示例 1：组件功能扩展（高阶组件）**
+
+```js
+function withLogging(WrappedComponent) {
+  return function (props) {
+    console.log("Props:", props);
+    return <WrappedComponent {...props} />;
+  };
+}
+```
+
+**示例 2：ES 装饰器语法（TypeScript）**
+
+```ts
+function readonly(target, name, descriptor) {
+  descriptor.writable = false;
+  return descriptor;
+}
+
+class Example {
+  @readonly
+  name() {
+    return "Hello";
+  }
+}
+```
+
+---
+
+#### 3. 外观模式
+
+为子系统中的一组接口提供统一的入口，简化复杂系统的使用。
+
+**示例 1：封装本地存储接口**
+
+```js
+const StorageFacade = {
+  set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+  get(key) {
+    return JSON.parse(localStorage.getItem(key));
+  },
+  remove(key) {
+    localStorage.removeItem(key);
+  },
+};
+```
+
+**示例 2：封装网络请求流程**
+
+```js
+const HttpClient = {
+  async get(url) {
+    const res = await fetch(url);
+    return res.json();
+  },
+  async post(url, data) {
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.json();
+  },
+};
+```
+
+---
+
+#### 4. 代理模式
+
+为其他对象提供一种代理以控制对该对象的访问。
+
+**示例 1：图片懒加载代理**
+
+```js
+function lazyLoad(imgElement, realSrc) {
+  const temp = new Image();
+  temp.onload = () => {
+    imgElement.src = realSrc;
+  };
+  temp.src = realSrc;
+}
+```
+
+**示例 2：网络请求缓存代理**
+
+```js
+const requestProxy = (() => {
+  const cache = {};
+  return async function (url) {
+    if (cache[url]) {
+      return cache[url];
+    }
+    const res = await fetch(url);
+    const data = await res.json();
+    cache[url] = data;
+    return data;
+  };
+})();
+```
+
+---
+
+#### 5. 组合模式
+
+将对象组合成树形结构以表示“部分-整体”的层次结构。
+
+**示例 1：菜单结构渲染**
+
+```js
+const menu = {
+  name: "Root",
+  children: [
+    { name: "Item 1" },
+    { name: "Item 2", children: [{ name: "Sub Item" }] },
+  ],
+};
+
+function renderMenu(item) {
+  if (!item.children) return `<li>${item.name}</li>`;
+  return `
+    <li>${item.name}
+      <ul>${item.children.map(renderMenu).join("")}</ul>
+    </li>
+  `;
+}
+```
+
+**示例 2：React 树状组件结构**
+
+```jsx
+function TreeNode({ node }) {
+  return (
+    <li>
+      {node.label}
+      {node.children && (
+        <ul>
+          {node.children.map((child, i) => (
+            <TreeNode key={i} node={child} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+```
+
+---
+
+#### 6. 桥接模式
+
+将抽象与实现解耦，使它们可以独立变化。
+
+**示例 1：按钮样式与平台分离**
+
+```js
+class Button {
+  constructor(theme) {
+    this.theme = theme;
+  }
+
+  render() {
+    console.log(`Rendering button in ${this.theme.getColor()}`);
+  }
+}
+
+class DarkTheme {
+  getColor() {
+    return "dark";
+  }
+}
+
+class LightTheme {
+  getColor() {
+    return "light";
+  }
+}
+
+const darkButton = new Button(new DarkTheme());
+darkButton.render(); // Rendering button in dark
+```
+
+**示例 2：图表与数据源分离**
+
+```js
+class Chart {
+  constructor(dataSource) {
+    this.dataSource = dataSource;
+  }
+
+  draw() {
+    const data = this.dataSource.getData();
+    console.log("Drawing chart with", data);
+  }
+}
+
+class APIDataSource {
+  getData() {
+    return [1, 2, 3];
+  }
+}
+```
+
+---
+
+#### 7. 享元模式
+
+运用共享技术有效支持大量细粒度对象的复用，避免重复创建相同数据。
+
+**示例 1：图标复用**
+
+```js
+class IconFactory {
+  constructor() {
+    this.icons = {};
+  }
+
+  getIcon(type) {
+    if (!this.icons[type]) {
+      this.icons[type] = new Icon(type);
+    }
+    return this.icons[type];
+  }
+}
+```
+
+**示例 2：虚拟列表复用 DOM**
+
+```js
+// 虚拟滚动中只渲染可视区域的 DOM，复用已存在的元素以节省性能
+```
+
+---
+
+## 行为型设计模式（Behavioral Patterns）
+
+#### 1. 观察者模式
+
+定义对象间一对多的依赖关系，当一个对象状态发生变化时，所有依赖它的对象都会收到通知并自动更新。
+
+**示例 1：事件订阅系统**
+
+```js
+class EventEmitter {
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, listener) {
+    (this.events[event] ||= []).push(listener);
+  }
+
+  emit(event, ...args) {
+    (this.events[event] || []).forEach((listener) => listener(...args));
+  }
+}
+
+const emitter = new EventEmitter();
+emitter.on("change", (data) => console.log("Changed:", data));
+emitter.emit("change", { name: "John" });
+```
+
+**示例 2：Vue 响应式系统（简化版）**
+
+```js
+let activeEffect = null;
+
+function watchEffect(effect) {
+  activeEffect = effect;
+  effect();
+  activeEffect = null;
+}
+
+function reactive(obj) {
+  const deps = new Map();
+
+  return new Proxy(obj, {
+    get(target, key) {
+      if (activeEffect) {
+        if (!deps.has(key)) deps.set(key, []);
+        deps.get(key).push(activeEffect);
+      }
+      return target[key];
+    },
+    set(target, key, value) {
+      target[key] = value;
+      (deps.get(key) || []).forEach((fn) => fn());
+      return true;
+    },
+  });
+}
+```
+
+---
+
+#### 2. 策略模式
+
+定义一系列算法，把它们一个个封装起来，并且使它们可以互相替换。
+
+**示例 1：表单校验策略**
+
+```js
+const strategies = {
+  isNonEmpty: (val) => val !== "",
+  isEmail: (val) => /\S+@\S+\.\S+/.test(val),
+};
+
+function validate(value, rule) {
+  return strategies[rule](value);
+}
+```
+
+**示例 2：不同排序策略切换**
+
+```js
+const sortByName = (arr) =>
+  [...arr].sort((a, b) => a.name.localeCompare(b.name));
+const sortByAge = (arr) => [...arr].sort((a, b) => a.age - b.age);
+
+function sortUsers(users, strategy) {
+  return strategy(users);
+}
+```
+
+---
+
+#### 3. 状态模式
+
+允许一个对象在其内部状态发生改变时改变它的行为。
+
+**示例 1：按钮状态管理**
+
+```js
+class Button {
+  constructor() {
+    this.state = "normal";
+  }
+
+  click() {
+    if (this.state === "loading") {
+      console.log("Please wait...");
+    } else {
+      console.log("Button clicked");
+    }
+  }
+
+  setState(state) {
+    this.state = state;
+  }
+}
+```
+
+**示例 2：表单流程状态控制**
+
+```js
+class Form {
+  constructor() {
+    this.state = "idle";
+  }
+
+  submit() {
+    if (this.state === "idle") {
+      this.state = "submitting";
+      console.log("Submitting...");
+    }
+  }
+
+  success() {
+    this.state = "success";
+  }
+
+  fail() {
+    this.state = "error";
+  }
+}
+```
+
+---
+
+#### 4. 职责链模式
+
+使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。
+
+**示例 1：中间件机制（如 Express）**
+
+```js
+const middlewares = [];
+
+function use(mw) {
+  middlewares.push(mw);
+}
+
+function handleRequest(req, res) {
+  let i = 0;
+
+  function next() {
+    const mw = middlewares[i++];
+    if (mw) mw(req, res, next);
+  }
+
+  next();
+}
+```
+
+**示例 2：前端表单处理链**
+
+```js
+function createChain(...fns) {
+  return function (input) {
+    for (const fn of fns) {
+      const result = fn(input);
+      if (!result.success) return result;
+    }
+    return { success: true };
+  };
+}
+```
+
+---
+
+#### 5. 命令模式
+
+将请求封装成对象，从而让你使用不同的请求、队列或日志请求，以及可撤销操作。
+
+**示例 1：操作记录撤销**
+
+```js
+class CommandManager {
+  constructor() {
+    this.history = [];
+  }
+
+  execute(command) {
+    command.execute();
+    this.history.push(command);
+  }
+
+  undo() {
+    const command = this.history.pop();
+    if (command) command.undo();
+  }
+}
+
+class AddCommand {
+  constructor(target, value) {
+    this.target = target;
+    this.value = value;
+  }
+
+  execute() {
+    this.target.count += this.value;
+  }
+
+  undo() {
+    this.target.count -= this.value;
+  }
+}
+```
+
+**示例 2：UI 操作命令封装**
+
+```js
+class ShowModalCommand {
+  execute() {
+    console.log("Showing modal...");
+  }
+
+  undo() {
+    console.log("Hiding modal...");
+  }
+}
+```
+
+---
+
+#### 6. 迭代器模式
+
+提供一种顺序访问集合对象元素而不暴露内部结构的方式。
+
+**示例 1：自定义迭代器对象**
+
+```js
+function createIterator(array) {
+  let index = 0;
+  return {
+    next: () => ({
+      done: index >= array.length,
+      value: array[index++],
+    }),
+  };
+}
+```
+
+**示例 2：前端分页组件迭代数据源**
+
+```js
+class Paginator {
+  constructor(items, pageSize) {
+    this.items = items;
+    this.pageSize = pageSize;
+    this.page = 0;
+  }
+
+  nextPage() {
+    this.page++;
+    return this.items.slice(
+      this.page * this.pageSize,
+      (this.page + 1) * this.pageSize
+    );
+  }
+}
+```
+
+---
+
+#### 7. 中介者模式
+
+用一个中介对象封装一系列对象交互，减少对象之间的耦合。
+
+**示例 1：组件通信中介**
+
+```js
+class Mediator {
+  constructor() {
+    this.components = {};
+  }
+
+  register(name, component) {
+    this.components[name] = component;
+    component.setMediator(this);
+  }
+
+  send(message, from, to) {
+    if (this.components[to]) {
+      this.components[to].receive(message, from);
+    }
+  }
+}
+```
+
+**示例 2：表单各字段联动更新**
+
+```js
+// 表单项之间通过 mediator 控制逻辑响应，比如性别切换影响年龄校验逻辑
+```
+
+---
+
+#### 8. 备忘录模式
+
+在不破坏封装性的前提下捕获对象内部状态，并在以后恢复该状态。
+
+**示例 1：表单填写状态保存**
+
+```js
+class FormMemento {
+  constructor(state) {
+    this.state = { ...state };
+  }
+}
+
+class Form {
+  constructor() {
+    this.state = {};
+    this.history = [];
+  }
+
+  setState(newState) {
+    this.history.push(new FormMemento(this.state));
+    this.state = { ...this.state, ...newState };
+  }
+
+  undo() {
+    const memento = this.history.pop();
+    if (memento) this.state = memento.state;
+  }
+}
+```
+
+**示例 2：撤销编辑操作**
+
+```js
+// 维护状态快照，支持 Ctrl + Z 撤销
+```
+
+---
+
+#### 9. 解释器模式
+
+给定一种语言，定义其文法的一种表示，并定义一个解释器来解释语言中的句子。
+
+**示例 1：简单模版引擎**
+
+```js
+function interpret(template, context) {
+  return template.replace(/{{(\w+)}}/g, (_, key) => context[key] || "");
+}
+```
+
+**示例 2：自定义计算表达式**
+
+```js
+// 支持输入 "3 + 4 * 2" 的表达式解析与执行
+```
+
+---
+
+#### 10. 模板方法模式
+
+在父类中定义算法结构，并将具体实现延迟到子类中。
+
+**示例 1：组件生命周期钩子调用顺序**
+
+```js
+class Component {
+  render() {
+    this.beforeRender();
+    console.log("Rendering...");
+    this.afterRender();
+  }
+
+  beforeRender() {}
+  afterRender() {}
+}
+```
+
+**示例 2：请求前后处理模板**
+
+```js
+class HttpTemplate {
+  request(url) {
+    this.before();
+    fetch(url).then(this.after);
+  }
+
+  before() {
+    console.log("Loading...");
+  }
+
+  after() {
+    console.log("Done.");
+  }
+}
+```
+

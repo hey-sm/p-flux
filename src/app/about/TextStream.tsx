@@ -2,29 +2,68 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { ResponseStream } from "@/components/ui/response-stream";
-import quotesData from "@/app/about/quotes.json";
 import { LampContainer } from "@/components/ui/lamp";
+
+interface Quote {
+  id: number;
+  text: string;
+  author: string;
+  created_at?: string;
+}
+
 export default function TextStream() {
-  const [quote, setQuote] = useState({ text: "", author: "" });
+  const [quote, setQuote] = useState<Quote>({ id: 0, text: "", author: "" });
   const [showAuthor, setShowAuthor] = useState(false);
   const [key, setKey] = useState(0);
-  const usedQuotesRef = useRef(new Set());
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const usedQuotesRef = useRef(new Set<number>());
+
+  // 从API获取引言数据
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/quotes");
+        if (!response.ok) {
+          throw new Error("获取引言失败");
+        }
+        const data = await response.json();
+        setQuotes(data.quotes);
+
+        // 加载完成后显示第一条引言
+        if (data.quotes.length > 0) {
+          getNextQuote(data.quotes);
+        }
+      } catch (error) {
+        console.error("获取引言失败:", error);
+        setError("获取引言数据失败，请稍后再试");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuotes();
+  }, []);
 
   // 获取新引言
-  const getNextQuote = () => {
+  const getNextQuote = (quotesList = quotes) => {
+    if (quotesList.length === 0) return { id: 0, text: "", author: "" };
+
     // 如果所有引言都已使用，重置
-    if (usedQuotesRef.current.size >= quotesData.length) {
+    if (usedQuotesRef.current.size >= quotesList.length) {
       usedQuotesRef.current.clear();
     }
 
     // 找到未使用的引言
     let randomIndex;
     do {
-      randomIndex = Math.floor(Math.random() * quotesData.length);
+      randomIndex = Math.floor(Math.random() * quotesList.length);
     } while (usedQuotesRef.current.has(randomIndex));
 
     usedQuotesRef.current.add(randomIndex);
-    const newQuote = quotesData[randomIndex];
+    const newQuote = quotesList[randomIndex];
     setQuote(newQuote);
     setShowAuthor(false);
     setKey((prev) => prev + 1);
@@ -36,10 +75,29 @@ export default function TextStream() {
     setShowAuthor(true);
   };
 
-  // 初始化
-  useEffect(() => {
-    getNextQuote();
-  }, []);
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <div className="animate-pulse">加载引言中...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] text-red-500">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  if (quotes.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] text-gray-500">
+        <p>暂无引言数据</p>
+      </div>
+    );
+  }
 
   return (
     <LampContainer key={key}>
@@ -50,7 +108,7 @@ export default function TextStream() {
           italic md:text-lg text-gray-400 
           px-5 md:px-6
         "
-        onClick={getNextQuote}
+        onClick={() => getNextQuote()}
       >
         <div className="flex items-center justify-center w-full">
           <ResponseStream
