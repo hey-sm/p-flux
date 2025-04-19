@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import React, { useState } from "react";
@@ -24,15 +26,8 @@ export default function AdminPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">管理中心</h1>
         <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft size={16} />
-            返回首页
-          </Link>
+          <h1 className="text-xl font-bold">fluxp</h1>
           <Button
             variant="outline"
             size="sm"
@@ -43,6 +38,15 @@ export default function AdminPage() {
             <LogOut size={16} />
             {loggingOut ? "登出中..." : "登出"}
           </Button>
+        </div>
+        <div>
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft size={16} />
+            返回首页
+          </Link>
         </div>
       </div>
 

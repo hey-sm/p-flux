@@ -1,7 +1,9 @@
+/** @format */
+
 "use client";
 
 import React, { useState } from "react";
-import { Edit2, Trash2, Eye } from "lucide-react";
+import { Check, Edit, Plus, Trash2, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,21 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetFooter,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface Quote {
   id: number;
@@ -35,18 +25,73 @@ interface Quote {
 
 interface QuotesTableProps {
   quotes: Quote[];
-  onEdit: (quote: Quote) => void;
+  onSave: (quote: Omit<Quote, "created_at">) => Promise<void>;
   onDelete: (id: number) => void;
   isLoading?: boolean;
+  onAdd: () => void;
 }
+
+// 抽取编辑操作按钮组件
+const EditActions = ({
+  onSave,
+  onCancel,
+  isDisabled,
+}: {
+  onSave: () => void;
+  onCancel: () => void;
+  isDisabled: boolean;
+}) => (
+  <div className="flex space-x-2">
+    <Button size="icon" variant="ghost" onClick={onSave} disabled={isDisabled}>
+      <Check className="h-4 w-4 text-green-600" />
+    </Button>
+    <Button size="icon" variant="ghost" onClick={onCancel}>
+      <X className="h-4 w-4 text-red-600" />
+    </Button>
+  </div>
+);
+
+// 抽取行操作按钮组件
+const RowActions = ({
+  onEdit,
+  onDelete,
+  isDisabled,
+}: {
+  onEdit: () => void;
+  onDelete: () => void;
+  isDisabled: boolean;
+}) => (
+  <div className="flex space-x-2">
+    <Button size="icon" variant="ghost" onClick={onEdit} disabled={isDisabled}>
+      <Edit className="h-4 w-4 text-blue-600" />
+    </Button>
+    <Button
+      size="icon"
+      variant="ghost"
+      onClick={onDelete}
+      disabled={isDisabled}
+    >
+      <Trash2 className="h-4 w-4 text-red-600" />
+    </Button>
+  </div>
+);
 
 export default function QuotesTable({
   quotes,
-  onEdit,
+  onSave,
   onDelete,
   isLoading = false,
+  onAdd,
 }: QuotesTableProps) {
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState<string>("");
+  const [editingAuthor, setEditingAuthor] = useState<string>("");
+  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [newQuote, setNewQuote] = useState<{ text: string; author: string }>({
+    text: "",
+    author: "",
+  });
+  const [saving, setSaving] = useState<boolean>(false);
 
   // 处理长文本截断
   const truncateText = (text: string, maxLength: number = 100) => {
@@ -54,145 +99,169 @@ export default function QuotesTable({
     return text.slice(0, maxLength) + "...";
   };
 
-  // 格式化日期
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("zh-CN", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+  // 开始编辑
+  const startEditing = (quote: Quote) => {
+    setEditingId(quote.id);
+    setEditingText(quote.text);
+    setEditingAuthor(quote.author);
+  };
+
+  // 取消编辑
+  const cancelEditing = () => {
+    setEditingId(null);
+  };
+
+  // 保存编辑
+  const saveEditing = async () => {
+    if (editingId === null || !editingText || !editingAuthor) return;
+
+    setSaving(true);
+    await onSave({
+      id: editingId,
+      text: editingText,
+      author: editingAuthor,
     });
+    setSaving(false);
+    setEditingId(null);
   };
 
-  // 详细日期格式化
-  const formatDetailDate = (dateString?: string) => {
-    if (!dateString) return "未知日期";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("zh-CN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+  // 开始新增
+  const startAdding = () => {
+    setIsAdding(true);
+    setNewQuote({ text: "", author: "" });
+    onAdd();
+  };
+
+  // 取消新增
+  const cancelAdding = () => {
+    setIsAdding(false);
+  };
+
+  // 保存新增
+  const saveNewQuote = async () => {
+    if (!newQuote.text || !newQuote.author) return;
+
+    setSaving(true);
+    await onSave({
+      id: 0, // 临时ID，后端会忽略并生成新ID
+      text: newQuote.text,
+      author: newQuote.author,
     });
+    setSaving(false);
+    setIsAdding(false);
+    setNewQuote({ text: "", author: "" });
   };
-
-  // 查看详情
-  const viewDetail = (quote: Quote) => {
-    setSelectedQuote(quote);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="w-full py-10 text-center">
-        <div className="animate-pulse">加载引言数据中...</div>
-      </div>
-    );
-  }
-
-  if (quotes.length === 0) {
-    return (
-      <div className="w-full py-10 text-center text-gray-500">暂无引言数据</div>
-    );
-  }
 
   return (
     <div className="w-full rounded-md border">
+      <div className="p-4 flex justify-between items-center border-b">
+        <h3 className="text-lg font-medium">引言列表</h3>
+        <Button onClick={startAdding} size="sm">
+          <Plus className="mr-2 h-4 w-4" />
+          新增引言
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[60px]">ID</TableHead>
-            <TableHead className="w-[300px]">引言</TableHead>
             <TableHead className="w-[150px]">作者</TableHead>
-            <TableHead className="w-[120px]">添加日期</TableHead>
-            <TableHead className="w-[120px] text-right">操作</TableHead>
+            <TableHead>引言</TableHead>
+            <TableHead className="w-[120px]">操作</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {quotes.map((quote) => (
-            <TableRow key={quote.id}>
-              <TableCell className="font-medium">{quote.id}</TableCell>
-              <TableCell className="max-w-[300px]">
-                <div className="whitespace-normal break-words">
-                  {truncateText(quote.text)}
-                </div>
+          {/* 新增引言 */}
+          {isAdding && (
+            <TableRow className="bg-muted/50">
+              <TableCell>
+                <Input
+                  value={newQuote.author}
+                  onChange={(e) =>
+                    setNewQuote({ ...newQuote, author: e.target.value })
+                  }
+                  placeholder="作者姓名"
+                  className="w-full"
+                  autoFocus
+                />
               </TableCell>
               <TableCell>
-                <Badge variant="outline">{quote.author}</Badge>
+                <Input
+                  value={newQuote.text}
+                  onChange={(e) =>
+                    setNewQuote({ ...newQuote, text: e.target.value })
+                  }
+                  placeholder="引言内容"
+                  className="w-full"
+                />
               </TableCell>
-              <TableCell>{formatDate(quote.created_at)}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => viewDetail(quote)}
-                        title="查看详情"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="right">
-                      <SheetHeader>
-                        <SheetTitle>引言详情</SheetTitle>
-                        <SheetDescription>
-                          ID: {selectedQuote?.id} · 由{" "}
-                          <Badge>{selectedQuote?.author}</Badge> 提供
-                        </SheetDescription>
-                      </SheetHeader>
-                      <Separator className="my-4" />
-                      <div className="space-y-4 py-4">
-                        <Card>
-                          <CardContent className="pt-6">
-                            <p className="whitespace-pre-wrap text-foreground">
-                              {selectedQuote?.text}
-                            </p>
-                          </CardContent>
-                        </Card>
-
-                        {selectedQuote?.created_at && (
-                          <div className="flex items-center text-muted-foreground text-sm">
-                            <Calendar className="h-4 w-4 mr-2" />
-                            <span>
-                              添加于{" "}
-                              {formatDetailDate(selectedQuote?.created_at)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <SheetFooter>
-                        <SheetClose asChild>
-                          <Button type="button" variant="secondary">
-                            关闭
-                          </Button>
-                        </SheetClose>
-                      </SheetFooter>
-                    </SheetContent>
-                  </Sheet>
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onEdit(quote)}
-                    title="编辑"
-                  >
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onDelete(quote.id)}
-                    title="删除"
-                  >
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
-                </div>
+              <TableCell>
+                <EditActions
+                  onSave={saveNewQuote}
+                  onCancel={cancelAdding}
+                  isDisabled={!newQuote.text || !newQuote.author || saving}
+                />
               </TableCell>
             </TableRow>
-          ))}
+          )}
+
+          {/* 无数据时显示提示 */}
+          {quotes.length === 0 && !isAdding ? (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="text-center py-10 text-gray-500"
+              >
+                暂无引言数据
+              </TableCell>
+            </TableRow>
+          ) : (
+            quotes
+              .sort((a, b) => b.id - a.id)
+              .map((quote) => (
+                <TableRow key={quote.id}>
+                  <TableCell>
+                    {editingId === quote.id ? (
+                      <Input
+                        value={editingAuthor}
+                        onChange={(e) => setEditingAuthor(e.target.value)}
+                        className="w-full"
+                        autoFocus
+                      />
+                    ) : (
+                      <Badge variant="outline">{quote.author}</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="max-w-[600px]">
+                    {editingId === quote.id ? (
+                      <Input
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        className="w-full"
+                      />
+                    ) : (
+                      <div className="whitespace-normal break-words">
+                        {truncateText(quote.text)}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingId === quote.id ? (
+                      <EditActions
+                        onSave={saveEditing}
+                        onCancel={cancelEditing}
+                        isDisabled={!editingText || !editingAuthor || saving}
+                      />
+                    ) : (
+                      <RowActions
+                        onEdit={() => startEditing(quote)}
+                        onDelete={() => onDelete(quote.id)}
+                        isDisabled={editingId !== null || saving}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+          )}
         </TableBody>
       </Table>
     </div>
