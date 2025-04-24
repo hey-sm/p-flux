@@ -31,8 +31,13 @@ const menuItems = [
     icon: "icon-[lucide--calendar]",
   },
   {
-    title: "网站导航",
-    url: "/navigation",
+    title: "每日一题",
+    url: "/dailyQ",
+    icon: "icon-[lucide--search]",
+  },
+  {
+    title: "useHooks",
+    url: "/useHooks",
     icon: "icon-[lucide--search]",
   },
   {
