@@ -16,15 +16,13 @@ export default function TextStream() {
   const [showAuthor, setShowAuthor] = useState(false);
   const [key, setKey] = useState(0);
   const [quotes, setQuotes] = useState<Quote[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
   const usedQuotesRef = useRef(new Set<number>());
 
   // 从API获取引言数据
   useEffect(() => {
     const fetchQuotes = async () => {
       try {
-        setLoading(true);
         const response = await fetch("/api/quotes");
         if (!response.ok) {
           throw new Error("获取引言失败");
@@ -38,9 +36,7 @@ export default function TextStream() {
         }
       } catch (error) {
         console.error("获取引言失败:", error);
-        setError("获取引言数据失败，请稍后再试");
       } finally {
-        setLoading(false);
       }
     };
 
@@ -74,31 +70,6 @@ export default function TextStream() {
   const handleQuoteComplete = () => {
     setShowAuthor(true);
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <div className="animate-pulse">加载引言中...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px] text-red-500">
-        <p>{error}</p>
-      </div>
-    );
-  }
-
-  if (quotes.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px] text-gray-500">
-        <p>暂无引言数据</p>
-      </div>
-    );
-  }
-
   return (
     <LampContainer key={key}>
       <div
