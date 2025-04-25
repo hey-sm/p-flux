@@ -38,7 +38,7 @@ const menuItems = [
   {
     title: "useHooks",
     url: "/useHooks",
-    icon: "icon-[lucide--search]",
+    icon: "icon-[lucide--boxes]",
   },
   {
     title: "flux",

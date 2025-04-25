@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useDebounce } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,7 @@ export default function UseDebounceDemo() {
   // 防抖延迟时间（毫秒）
   const [delay, setDelay] = useState(500);
   // 应用防抖的值
-  const debouncedValue = useDebounce<string>(inputValue, delay);
+  const [debouncedValue] = useDebounceValue<string>(inputValue, delay);
   // 模拟 API 调用记录
   const [apiCalls, setApiCalls] = useState<
     Array<{ time: string; value: string }>
@@ -59,7 +59,7 @@ export default function UseDebounceDemo() {
                 min={0}
                 max={2000}
                 step={100}
-                onValueChange={(value) => setDelay(value[0])}
+                onValueChange={(value: number[]) => setDelay(value[0])}
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>0ms（无防抖）</span>
@@ -127,13 +127,13 @@ export default function UseDebounceDemo() {
 
 // 代码示例，用于展示页面
 export const CODE_EXAMPLE = `
-import { useState } from 'react';
-import { useDebounce } from 'usehooks-ts';
+import { useState, useEffect } from 'react';
+import { useDebounceValue } from 'usehooks-ts';
 
 function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState('');
   // 值将在 500ms 后更新
-  const debouncedSearchTerm = useDebounce<string>(searchTerm, 500);
+  const [debouncedSearchTerm] = useDebounceValue<string>(searchTerm, 500);
   
   // 仅当 debouncedSearchTerm 变化时触发 API 调用
   useEffect(() => {
@@ -155,10 +155,10 @@ function SearchComponent() {
 
 // Hook 的元数据
 export const HOOK_META = {
-  name: "useDebounce",
+  name: "useDebounceValue",
   description: "延迟更新值的 Hook，用于处理频繁变化的输入（如搜索框）",
   category: "性能",
-  docsLink: "https://usehooks-ts.com/react-hook/use-debounce",
+  docsLink: "https://usehooks-ts.com/react-hook/use-debounce-value",
   githubLink:
-    "https://github.com/juliencrn/usehooks-ts/blob/master/packages/usehooks-ts/src/useDebounce/useDebounce.ts",
+    "https://github.com/juliencrn/usehooks-ts/blob/master/packages/usehooks-ts/src/useDebounceValue/useDebounceValue.ts",
 };

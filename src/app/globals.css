@@ -4,7 +4,7 @@
 @import "tw-animate-css";
 @plugin "@iconify/tailwind4";
 @import "../styles/marquee.css";
-
+@import "../styles/scrollbar.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -45,13 +45,15 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
+  --animate-ripple: ripple var(--duration, 2s) ease calc(var(--i, 0) * 0.2s)
+    infinite;
   @keyframes ripple {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
     }
-  50% {
-    transform: translate(-50%, -50%) scale(0.9);
+    50% {
+      transform: translate(-50%, -50%) scale(0.9);
     }
   }
 }
@@ -89,10 +91,11 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
-  --scrollbar-width: 3px; /* 更细的滚动条宽度 */
-  --scrollbar-height: 60px; /* 滚动条滑块固定长度 */
-  --scrollbar-track: transparent; /* 透明轨道 */
-  --scrollbar-thumb: rgba(136, 136, 136, 0.3); /* 半透明滑块 */
+  --scrollbar-width: 3px;
+  --scrollbar-height: 60px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(136, 136, 136, 0.1);
+  --scrollbar-thumb-hover: rgba(136, 136, 136, 0.3);
 }
 
 .dark {
@@ -127,6 +130,8 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 }
 
 @layer base {
@@ -136,70 +141,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* 整体滚动条样式 - 使用更细的滚动条 */
-::-webkit-scrollbar {
-  width: var(--scrollbar-width);
-  height: var(--scrollbar-width);
-}
-
-/* 滚动条轨道 */
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-/* 滚动条滑块 - 使用固定长度 */
-::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 4px;
-  min-height: var(--scrollbar-height) !important;
-}
-
-/* 水平滚动条滑块 */
-::-webkit-scrollbar-thumb:horizontal {
-  min-width: var(--scrollbar-height) !important;
-  height: var(--scrollbar-width);
-}
-
-/* 使整个文档采用细滚动条 */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox支持 */
-}
-
-body {
-  /* 应用全局细滚动条 */
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox支持 */
-}
-
-/* 隐藏滚动条但保留功能的元素 */
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-/* 细滚动条 - 已应用到全局，保留类以便在特定元素上使用 */
-.scrollbar-thin {
-  scrollbar-width: thin;
-}
-
-.scrollbar-thin::-webkit-scrollbar {
-  width: var(--scrollbar-width);
-}
-/* 固定长度的滚动条滑块 */
-.scrollbar-fixed-thumb::-webkit-scrollbar-thumb {
-  min-height: var(--scrollbar-height) !important;
-}
-
-/* 为高度超过一屏的内容提供更好的滚动体验 */
-.content-scroll {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-gutter: stable;
 }

@@ -14,12 +14,14 @@ export default function UseHooksLayout({
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       {/* 侧边菜单 */}
-      <div className="w-full md:w-64 shrink-0 border-r bg-muted/40">
+      <div className="w-full md:w-64 shrink-0 border-r bg-muted/40 md:h-screen md:overflow-y-auto sticky top-0 sidebar-thin-scrollbar">
         <HooksSidebar />
       </div>
 
       {/* 主内容区 */}
-      <div className="flex-1 p-6 md:p-8 overflow-auto">{children}</div>
+      <div className="flex-1 p-6 md:p-8 md:h-screen md:overflow-y-auto">
+        {children}
+      </div>
     </div>
   );
 }

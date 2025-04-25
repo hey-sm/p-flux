@@ -217,7 +217,7 @@ export default function UseLocalStorageDemo() {
               {JSON.stringify(preferences, null, 2)}
             </pre>
             <p className="text-xs text-muted-foreground mt-2">
-              键名: "user-preferences"
+              键名: &quot;user-preferences&quot;
             </p>
           </CardContent>
         </Card>
