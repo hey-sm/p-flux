@@ -3,23 +3,21 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-interface HookScenarioProps {
+interface UseCaseProps {
   title?: string;
-  index: number;
   children: React.ReactNode;
   codeExample: string;
 }
 
-export default function HookScenario({
+export default function UseCase({
   title,
-  index,
   children,
   codeExample,
-}: HookScenarioProps) {
+}: UseCaseProps) {
   return (
     <div className="space-y-2">
       <h5 className="text-lg font-bold tracking-tight">
-        {title || `使用场景${index + 1}`}
+        {title || `使用场景`}
       </h5>
       <Tabs defaultValue="demo" className="w-full">
         <TabsList>

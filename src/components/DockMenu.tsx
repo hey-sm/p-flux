@@ -8,49 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 import { cn } from "@/lib/utils";
 import { Dock, DockIcon } from "@/components/magicui/dock";
-
-const menuItems = [
-  {
-    title: "首页",
-    url: "/",
-    icon: "icon-[lucide--home]",
-  },
-  {
-    title: "博客笔记",
-    url: "/blog",
-    icon: "icon-[lucide--inbox]",
-  },
-  {
-    title: "书籍阅读",
-    url: "/books",
-    icon: "icon-[lucide--book-open]",
-  },
-  {
-    title: "组件特效",
-    url: "/ui-showcase",
-    icon: "icon-[lucide--calendar]",
-  },
-  {
-    title: "每日一题",
-    url: "/dailyQ",
-    icon: "icon-[lucide--search]",
-  },
-  {
-    title: "useHooks",
-    url: "/useHooks",
-    icon: "icon-[lucide--boxes]",
-  },
-  {
-    title: "flux",
-    url: "/about",
-    icon: "icon-[lucide--user]",
-  },
-  {
-    title: "admin",
-    url: "/admin",
-    icon: "icon-[lucide--settings]",
-  },
-];
+import { menuItems } from "@/config/dockMenu";
 
 // 主菜单组件
 function DockMenuContent() {

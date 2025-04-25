@@ -1,5 +1,5 @@
 import React from "react";
-import HooksSidebar from "./components/HooksSidebar";
+import { HooksSidebar } from "./components/exports";
 
 export const metadata = {
   title: "useHooks-ts 示例集合",

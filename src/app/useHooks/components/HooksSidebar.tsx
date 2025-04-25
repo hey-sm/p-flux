@@ -1,106 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-
-// 定义 usehooks-ts 库的主要 hooks
-const HOOKS = [
-  {
-    id: "useBoolean",
-    name: "useBoolean",
-    description: "布尔值状态管理",
-    category: "状态",
-  },
-  {
-    id: "useCounter",
-    name: "useCounter",
-    description: "数字计数器状态管理",
-    category: "状态",
-  },
-  {
-    id: "useEffectOnce",
-    name: "useEffectOnce",
-    description: "只执行一次的 Effect",
-    category: "生命周期",
-  },
-  {
-    id: "useLocalStorage",
-    name: "useLocalStorage",
-    description: "本地存储状态管理",
-    category: "存储",
-  },
-  {
-    id: "useSessionStorage",
-    name: "useSessionStorage",
-    description: "会话存储状态管理",
-    category: "存储",
-  },
-  {
-    id: "useDarkMode",
-    name: "useDarkMode",
-    description: "暗黑模式状态管理",
-    category: "UI",
-  },
-  {
-    id: "useDebounce",
-    name: "useDebounce",
-    description: "防抖值处理",
-    category: "性能",
-  },
-  {
-    id: "useThrottle",
-    name: "useThrottle",
-    description: "节流值处理",
-    category: "性能",
-  },
-  {
-    id: "useDocumentTitle",
-    name: "useDocumentTitle",
-    description: "文档标题管理",
-    category: "浏览器",
-  },
-  {
-    id: "useCopyToClipboard",
-    name: "useCopyToClipboard",
-    description: "剪贴板操作",
-    category: "浏览器",
-  },
-  {
-    id: "useInterval",
-    name: "useInterval",
-    description: "可控的 setInterval",
-    category: "计时器",
-  },
-  {
-    id: "useTimeout",
-    name: "useTimeout",
-    description: "可控的 setTimeout",
-    category: "计时器",
-  },
-  {
-    id: "useHover",
-    name: "useHover",
-    description: "悬停状态检测",
-    category: "UI",
-  },
-  {
-    id: "useMediaQuery",
-    name: "useMediaQuery",
-    description: "媒体查询检测",
-    category: "浏览器",
-  },
-  {
-    id: "useFetch",
-    name: "useFetch",
-    description: "数据获取处理",
-    category: "数据",
-  },
-];
+import { HOOKS } from "@/config/useHooksMenu";
 
 // 按类别对 hooks 进行分组
 const CATEGORIES = Array.from(new Set(HOOKS.map((hook) => hook.category)));
@@ -108,6 +15,9 @@ const CATEGORIES = Array.from(new Set(HOOKS.map((hook) => hook.category)));
 export default function HooksSidebar() {
   const pathname = usePathname();
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchVisible, setSearchVisible] = React.useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // 过滤 hooks
   const filteredHooks = HOOKS.filter(
@@ -127,25 +37,73 @@ export default function HooksSidebar() {
     };
   }).filter((group) => group.hooks.length > 0);
 
+  // 切换搜索框显示/隐藏
+  const toggleSearch = () => {
+    setSearchVisible(!searchVisible);
+    // 如果显示搜索框，则聚焦输入框
+    if (!searchVisible) {
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
+    }
+  };
+
+  // 点击外部关闭搜索框
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setSearchVisible(false);
+      }
+    };
+
+    if (searchVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchVisible]);
+
+  // 点击搜索结果后隐藏搜索框
+  const handleHookSelect = () => {
+    setSearchVisible(false);
+  };
+
   return (
     <div className="flex h-full flex-col">
       {/* 侧边栏标题 */}
-      <div className="flex items-center p-4 border-b">
-        <h2 className="text-lg font-semibold">useHooks-ts</h2>
+      <div className="flex items-center p-4 border-b justify-between">
+        <Link href="/useHooks">
+          <h2 className="text-lg font-semibold">useHooks-ts</h2>
+        </Link>
+        <button
+          onClick={toggleSearch}
+          className="p-2 rounded-full hover:bg-slate-200 w-8 h-8 flex items-center justify-center"
+          title="搜索Hooks"
+        >
+          <i className="icon-[mdi--magnify] w-4 h-4"></i>
+        </button>
       </div>
 
       {/* 搜索框 */}
-      <div className="p-4">
-        <div className="relative">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="搜索 Hooks..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
+      {searchVisible && (
+        <div className="p-4" ref={searchContainerRef}>
+          <div className="relative">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              ref={searchInputRef}
+              placeholder="搜索 Hooks..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-8"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Hooks 列表 */}
       <ScrollArea className="flex-1">
@@ -166,11 +124,9 @@ export default function HooksSidebar() {
                         ? "bg-accent text-accent-foreground font-medium"
                         : "text-muted-foreground"
                     )}
+                    onClick={handleHookSelect}
                   >
                     <div>{hook.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {hook.description}
-                    </div>
                   </Link>
                 ))}
               </div>

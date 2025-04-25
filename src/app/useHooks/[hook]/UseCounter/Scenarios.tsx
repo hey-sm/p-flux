@@ -1,13 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCounter } from "usehooks-ts";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlusIcon, MinusIcon, RotateCcwIcon, StarIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { PlusIcon, MinusIcon, RotateCcwIcon, StarIcon } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { CODE_EXAMPLES } from "./NativeImplementation";
+
+// =====================================
+// 场景演示组件
+// =====================================
 
 // 基本计数器组件
 function BasicCounter() {
@@ -417,24 +430,9 @@ function RatingComponent() {
   );
 }
 
-export function BasicCounterDemo() {
-  return <BasicCounter />;
-}
-
-export function PaginationDemo() {
-  return <PaginationExample />;
-}
-
-export function QuantitySelectorDemo() {
-  return <QuantitySelector />;
-}
-
-export function RatingComponentDemo() {
-  return <RatingComponent />;
-}
-
-// 每个场景对应的代码示例
-export const BASIC_COUNTER_CODE = `
+// 各种使用场景示例代码
+const SCENARIO_CODE = {
+  BasicCounterCode: `
 import { useCounter } from 'usehooks-ts';
 
 function BasicCounter() {
@@ -454,30 +452,28 @@ function BasicCounter() {
     </div>
   );
 }
-`;
-
-export const PAGINATION_CODE = `
-function Pagination({ totalPages = 10 }) {
-  const { count: page, setCount: setPage } = useCounter(1);
-  
-  // 确保页码在有效范围内
-  const goToPage = (p) => {
-    if (p >= 1 && p <= totalPages) {
-      setPage(p);
-    }
-  };
-  
-  return (
-    <div>
-      <button onClick={() => goToPage(page - 1)} disabled={page === 1}>上一页</button>
-      <span>第 {page} 页，共 {totalPages} 页</span>
-      <button onClick={() => goToPage(page + 1)} disabled={page === totalPages}>下一页</button>
-    </div>
-  );
-}
-`;
-
-export const QUANTITY_SELECTOR_CODE = `
+`,
+  PaginationCode: `
+  function Pagination({ totalPages = 10 }) {
+    const { count: page, setCount: setPage } = useCounter(1);
+    
+    // 确保页码在有效范围内
+    const goToPage = (p) => {
+      if (p >= 1 && p <= totalPages) {
+        setPage(p);
+      }
+    };
+    
+    return (
+      <div>
+        <button onClick={() => goToPage(page - 1)} disabled={page === 1}>上一页</button>
+        <span>第 {page} 页，共 {totalPages} 页</span>
+        <button onClick={() => goToPage(page + 1)} disabled={page === totalPages}>下一页</button>
+      </div>
+    );
+  }
+  `,
+  QuantitySelectorCode: `
 function QuantitySelector({ maxQuantity = 10, price = 99.9 }) {
   const { count: quantity, increment, decrement } = useCounter(1);
   
@@ -490,9 +486,8 @@ function QuantitySelector({ maxQuantity = 10, price = 99.9 }) {
     </div>
   );
 }
-`;
-
-export const RATING_CODE = `
+`,
+  RatingCode: `
 function Rating() {
   const { count: rating, setCount: setRating } = useCounter(0);
   const maxRating = 5;
@@ -508,51 +503,28 @@ function Rating() {
     </div>
   );
 }
-`;
-
-// Hook 的元数据
-export const HOOK_META = {
-  name: "useCounter",
-  description:
-    "用于管理计数器状态的 Hook，提供递增、递减、重置和直接设置值等功能",
-  category: "状态",
-  docsLink: "https://usehooks-ts.com/react-hook/use-counter",
-  githubLink:
-    "https://github.com/juliencrn/usehooks-ts/blob/master/packages/usehooks-ts/src/useCounter/useCounter.ts",
+`,
 };
 
-// 场景配置
-export const HOOK_SCENARIOS = [
+export const Examples = [
   {
-    title: "基本计数器/步进器",
-    demo: <BasicCounterDemo />,
-    code: BASIC_COUNTER_CODE,
+    title: "基本计数器组件",
+    example: <BasicCounter />,
+    code: SCENARIO_CODE.BasicCounterCode,
   },
   {
     title: "分页控件",
-    demo: <PaginationDemo />,
-    code: PAGINATION_CODE,
+    example: <PaginationExample />,
+    code: SCENARIO_CODE.PaginationCode,
   },
   {
     title: "商品数量选择器",
-    demo: <QuantitySelectorDemo />,
-    code: QUANTITY_SELECTOR_CODE,
+    example: <QuantitySelector />,
+    code: SCENARIO_CODE.QuantitySelectorCode,
   },
   {
     title: "评分组件",
-    demo: <RatingComponentDemo />,
-    code: RATING_CODE,
+    example: <RatingComponent />,
+    code: SCENARIO_CODE.RatingCode,
   },
 ];
-
-// 在文件底部添加一个默认导出
-export default function UseCounterDemo() {
-  return (
-    <div className="space-y-8">
-      <BasicCounter />
-      <PaginationExample />
-      <QuantitySelector />
-      <RatingComponent />
-    </div>
-  );
-}
