@@ -1,54 +1,40 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
+import { useEvent } from "react-use";
 
 const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
 
+  // 处理滚动事件
+  const handleScroll = useCallback(() => {
+    const scrollContainer = mainRef.current;
+    if (!scrollContainer) return;
+
+    const scrollTop = scrollContainer.scrollTop;
+    const viewportHeight = scrollContainer.clientHeight;
+    const threshold = viewportHeight * 0.8;
+    const shouldShow = scrollTop > threshold;
+
+    setIsVisible(shouldShow);
+  }, []);
+
+  // 获取滚动容器
   useEffect(() => {
     // 寻找主内容区域（main元素）
-    const findMainElement = () => {
-      const mainElements = document.querySelectorAll("main");
-      if (mainElements.length > 0) {
-        return mainElements[0] as HTMLElement;
-      }
-      return null;
-    };
-
-    // 获取滚动容器
-    const scrollContainer = findMainElement();
-    mainRef.current = scrollContainer;
-
-    if (!scrollContainer) {
-      return;
+    const mainElements = document.querySelectorAll("main");
+    if (mainElements.length > 0) {
+      mainRef.current = mainElements[0] as HTMLElement;
+      // 初始检查滚动位置
+      handleScroll();
     }
+  }, [handleScroll]);
 
-    const handleScroll = () => {
-      if (!scrollContainer) return;
-
-      const scrollTop = scrollContainer.scrollTop;
-      const viewportHeight = scrollContainer.clientHeight;
-      const threshold = viewportHeight * 0.8;
-      const shouldShow = scrollTop > threshold;
-
-      setIsVisible(shouldShow);
-    };
-
-    // 监听内容区域的滚动事件
-    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
-
-    // 初始检查
-    handleScroll();
-
-    return () => {
-      if (scrollContainer) {
-        scrollContainer.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+  // 使用useEvent监听滚动事件
+  useEvent("scroll", handleScroll, mainRef.current);
 
   // 当路径变化时重置滚动位置
   useEffect(() => {

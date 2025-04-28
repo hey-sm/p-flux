@@ -10,6 +10,7 @@ export const SIDEBAR_MENU = [
     category: "Sensors", // 浏览器/设备传感器和事件相关的 Hook
     hooks: [
       { name: "createBreakpoint", description: "创建断点组件" },
+      { name: "useEvent", description: "为 window 或 DOM 元素添加事件监听" },
       { name: "useBattery", description: "追踪设备电池状态" },
       { name: "useGeolocation", description: "追踪用户地理位置" },
       { name: "useIdle", description: "检测用户是否处于空闲状态" },

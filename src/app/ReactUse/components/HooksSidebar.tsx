@@ -25,9 +25,17 @@ export default function HooksSidebar() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // 获取当前断点
+  // 客户端水合标志
+  const [mounted, setMounted] = useState(false);
+
+  // 设置客户端水合标志
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 获取当前断点 - 只在客户端渲染后
   const breakpoint = useBreakpoint();
-  const isMobile = breakpoint === "mobile";
+  const isMobile = mounted && breakpoint === "mobile";
 
   // 路由变化时关闭移动端菜单
   useEffect(() => {
@@ -185,6 +193,11 @@ export default function HooksSidebar() {
     </div>
   );
 
+  // 如果没有完成客户端水合，返回一个与服务器渲染匹配的基础结构
+  if (!mounted) {
+    return <div className="hidden md:block">{renderSidebarContent()}</div>;
+  }
+
   // 如果是移动端
   if (isMobile) {
     return (
@@ -220,5 +233,5 @@ export default function HooksSidebar() {
   }
 
   // 桌面端默认显示
-  return renderSidebarContent();
+  return <div className="hidden md:block">{renderSidebarContent()}</div>;
 }
