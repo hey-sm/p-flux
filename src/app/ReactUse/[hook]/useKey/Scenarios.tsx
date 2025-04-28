@@ -81,6 +81,7 @@ function ShortcutManager() {
   const [actions, setActions] = useState<string[]>([]);
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTargetReady, setIsTargetReady] = useState(false);
+  const [autoFocused, setAutoFocused] = useState(false);
 
   // 添加操作记录
   const addAction = useCallback((action: string) => {
@@ -123,11 +124,11 @@ function ShortcutManager() {
     [addAction]
   );
 
-  // 挂载后标记 target 已准备好并聚焦
+  // 挂载后标记 target 已准备好，但不自动聚焦
   useEffect(() => {
     if (elementRef.current) {
       setIsTargetReady(true);
-      elementRef.current.focus();
+      // 不再自动聚焦
     }
   }, []);
 
@@ -290,6 +291,7 @@ function ShortcutManager() {
   const [actions, setActions] = useState<string[]>([]);
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTargetReady, setIsTargetReady] = useState(false);
+  const [autoFocused, setAutoFocused] = useState(false);
 
   // 添加操作记录
   const addAction = useCallback((action: string) => {
@@ -332,11 +334,11 @@ function ShortcutManager() {
     [addAction]
   );
 
-  // 挂载后标记 target 已准备好并聚焦
+  // 挂载后标记 target 已准备好，但不自动聚焦
   useEffect(() => {
     if (elementRef.current) {
       setIsTargetReady(true);
-      elementRef.current.focus();
+      // 不再自动聚焦
     }
   }, []);
 

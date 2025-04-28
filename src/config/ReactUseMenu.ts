@@ -1,10 +1,47 @@
 // 定义 react-use 库的主要 hooks
 export const SIDEBAR_MENU = [
   {
+    categoryCn: "组件",
     category: "Components", // 组件相关的 Hook
     hooks: [{ name: "useKey", description: "键盘按键绑定组件" }],
   },
   {
+    categoryCn: "传感器",
+    category: "Sensors", // 浏览器/设备传感器和事件相关的 Hook
+    hooks: [
+      { name: "createBreakpoint", description: "创建断点组件" },
+      { name: "useBattery", description: "追踪设备电池状态" },
+      { name: "useGeolocation", description: "追踪用户地理位置" },
+      { name: "useIdle", description: "检测用户是否处于空闲状态" },
+      {
+        name: "useIntersection",
+        description: "检测元素是否进入视口 (Intersection Observer)",
+      },
+      {
+        name: "useLocation",
+        description: "追踪浏览器 location 状态 (href, pathname, etc.)",
+      },
+      { name: "useMediaDevices", description: "追踪媒体设备 (摄像头, 麦克风)" },
+      { name: "useMotion", description: "追踪设备运动传感器" },
+      { name: "useMouse", description: "追踪鼠标在页面或元素内的位置" },
+      {
+        name: "useMouseHovered",
+        description: "追踪鼠标是否悬停在元素上，带延迟选项",
+      },
+      { name: "useNetworkState", description: "追踪网络连接状态" },
+      { name: "useOrientation", description: "追踪设备屏幕方向" },
+      { name: "usePageVisibility", description: "追踪页面可见性状态" },
+      { name: "usePermission", description: "查询浏览器 API 权限状态" },
+      { name: "useSpeech", description: "文本转语音 (Web Speech API)" },
+      { name: "useVibrate", description: "控制设备振动" },
+      {
+        name: "useScreenOrientation",
+        description: "获取屏幕方向状态（实验性）",
+      },
+    ],
+  },
+  {
+    categoryCn: "状态",
     category: "State", // 状态管理相关的 Hook
     hooks: [
       { name: "useBoolean", description: "管理布尔值状态" },
@@ -74,39 +111,7 @@ export const SIDEBAR_MENU = [
       { name: "useCopyToClipboard", description: "复制文本到剪贴板" },
     ],
   },
-  {
-    category: "Sensors", // 浏览器/设备传感器和事件相关的 Hook
-    hooks: [
-      { name: "useBattery", description: "追踪设备电池状态" },
-      { name: "useGeolocation", description: "追踪用户地理位置" },
-      { name: "useIdle", description: "检测用户是否处于空闲状态" },
-      {
-        name: "useIntersection",
-        description: "检测元素是否进入视口 (Intersection Observer)",
-      },
-      {
-        name: "useLocation",
-        description: "追踪浏览器 location 状态 (href, pathname, etc.)",
-      },
-      { name: "useMediaDevices", description: "追踪媒体设备 (摄像头, 麦克风)" },
-      { name: "useMotion", description: "追踪设备运动传感器" },
-      { name: "useMouse", description: "追踪鼠标在页面或元素内的位置" },
-      {
-        name: "useMouseHovered",
-        description: "追踪鼠标是否悬停在元素上，带延迟选项",
-      },
-      { name: "useNetworkState", description: "追踪网络连接状态" },
-      { name: "useOrientation", description: "追踪设备屏幕方向" },
-      { name: "usePageVisibility", description: "追踪页面可见性状态" },
-      { name: "usePermission", description: "查询浏览器 API 权限状态" },
-      { name: "useSpeech", description: "文本转语音 (Web Speech API)" },
-      { name: "useVibrate", description: "控制设备振动" },
-      {
-        name: "useScreenOrientation",
-        description: "获取屏幕方向状态（实验性）",
-      },
-    ],
-  },
+
   {
     category: "Side Effects", // 管理异步操作、订阅等副作用的 Hook
     hooks: [

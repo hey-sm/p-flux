@@ -1,12 +1,35 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
+import { useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   name?: string;
   description?: string;
   Badges?: string[];
 }
+const colors = [
+  "bg-blue-100",
+  "bg-indigo-100",
+  "bg-violet-100",
+  "bg-orange-100",
+  "bg-green-100",
+  "bg-sky-100",
+  "bg-slate-100",
+  "bg-purple-100",
+  "bg-pink-100",
+];
 
 export default function Header({ name, description, Badges }: HeaderProps) {
+  // 为每个Badge预先分配一个固定的颜色
+  const badgeColors = useMemo(() => {
+    if (!Badges) return {};
+    return Object.fromEntries(
+      Badges.map((badge, index) => [badge, colors[index % colors.length]])
+    );
+  }, [Badges]);
+
   const handleBadgeClickInternal = (badgeTitle: string) => {
     const element = document.getElementById(badgeTitle);
     if (element) {
@@ -29,7 +52,10 @@ export default function Header({ name, description, Badges }: HeaderProps) {
               <Badge
                 key={badge}
                 variant="outline"
-                className={"cursor-pointer hover:bg-primary/10"}
+                className={cn(
+                  "cursor-pointer hover:bg-primary/10",
+                  badgeColors[badge]
+                )}
                 onClick={() => handleBadgeClickInternal(badge)}
               >
                 {badge}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 
 import { Examples } from "./Scenarios";
 import { CODE_EXAMPLES } from "@/app/ReactUse/[hook]/useKey/NativeImplementation";
@@ -14,6 +14,19 @@ export default function Page() {
   // 收集所有场景标题
   const titles = Examples.map((example) => example.title);
 
+  // 使用useLayoutEffect确保在DOM渲染前强制滚动到顶部
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // 找到main元素并滚动到顶部
+    const mainElement = document.querySelector("main");
+    if (mainElement) {
+      mainElement.scrollTop = 0;
+    }
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* 标题部分 */}
@@ -21,7 +34,6 @@ export default function Page() {
         name="useKey"
         description="React-Use 提供的 useKey 钩子是一个用于监听键盘按键的工具，可以监听指定按键或按键组合，可以限定在组件范围内生效。"
         Badges={titles}
-        // 移除 onBadgeClick prop
       />
 
       {/* 原生实现部分 */}

@@ -1,5 +1,6 @@
 import React from "react";
 import { HooksSidebar } from "./components/exports";
+import BackToTopButton from "@/components/BackToTopButton";
 
 export const metadata = {
   title: "React-use 示例集合",
@@ -12,16 +13,25 @@ export default function UseHooksLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
-      {/* 侧边菜单 */}
-      <div className="w-full md:w-64 shrink-0 border-r bg-muted/40 md:h-screen md:overflow-y-auto sticky top-0 sidebar-thin-scrollbar">
+    <div className="flex min-h-screen flex-col md:flex-row relative">
+      {/* 移动端顶部菜单栏 */}
+      <div className="md:hidden flex items-center justify-between p-3 border-b bg-muted/40">
+        <span className="text-lg font-semibold">React-use</span>
+        <HooksSidebar />
+      </div>
+
+      {/* 侧边菜单 - 仅在桌面端显示 */}
+      <div className="hidden md:block w-64 shrink-0 border-r bg-muted/40 md:h-screen md:overflow-y-auto sticky top-0 sidebar-thin-scrollbar">
         <HooksSidebar />
       </div>
 
       {/* 主内容区 */}
-      <div className="flex-1 p-6 md:p-8 md:h-screen md:overflow-y-auto">
+      <main className="flex-1 p-6 md:p-8 md:h-screen md:overflow-y-auto">
         {children}
-      </div>
+      </main>
+
+      {/* 回到顶部按钮 */}
+      <BackToTopButton />
     </div>
   );
 }
