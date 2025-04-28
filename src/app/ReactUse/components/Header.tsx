@@ -4,14 +4,18 @@ interface HeaderProps {
   name?: string;
   description?: string;
   Badges?: string[];
-  onBadgeClick?: (index: number) => void;
 }
-export default function Header({
-  name,
-  description,
-  Badges,
-  onBadgeClick,
-}: HeaderProps) {
+
+export default function Header({ name, description, Badges }: HeaderProps) {
+  const handleBadgeClickInternal = (badgeTitle: string) => {
+    const element = document.getElementById(badgeTitle);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      console.warn(`[Header] Element with id '${badgeTitle}' '`);
+    }
+  };
+
   return (
     <div className="flex justify-between items-start">
       <div>
@@ -21,14 +25,12 @@ export default function Header({
         </p>
         <div className="flex gap-1 mt-2 flex-wrap">
           {Badges &&
-            Badges.map((badge, index) => (
+            Badges.map((badge) => (
               <Badge
                 key={badge}
                 variant="outline"
-                className={
-                  onBadgeClick ? "cursor-pointer hover:bg-primary/10" : ""
-                }
-                onClick={() => onBadgeClick && onBadgeClick(index)}
+                className={"cursor-pointer hover:bg-primary/10"}
+                onClick={() => handleBadgeClickInternal(badge)}
               >
                 {badge}
               </Badge>

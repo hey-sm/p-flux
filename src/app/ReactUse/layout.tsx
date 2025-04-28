@@ -2,8 +2,8 @@ import React from "react";
 import { HooksSidebar } from "./components/exports";
 
 export const metadata = {
-  title: "useHooks-ts 示例集合",
-  description: "usehooks-ts 库的各种 Hooks 使用示例展示",
+  title: "React-use 示例集合",
+  description: "React-use 库的各种 Hooks 使用示例展示",
 };
 
 export default function UseHooksLayout({

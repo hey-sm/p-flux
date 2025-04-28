@@ -20,8 +20,8 @@ export const menuItems = [
     icon: "icon-[lucide--calendar]",
   },
   {
-    title: "useHooks",
-    url: "/useHooks",
+    title: "ReactUse",
+    url: "/ReactUse",
     icon: "icon-[lucide--boxes]",
   },
   {

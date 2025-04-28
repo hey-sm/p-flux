@@ -17,7 +17,7 @@ export default function TitleComparison({
   beforeCode,
   afterCode,
   language = "tsx",
-  filename = "useHook.tsx",
+  filename = "",
 }: TitleComparisonProps) {
   return (
     <div className="space-y-4">

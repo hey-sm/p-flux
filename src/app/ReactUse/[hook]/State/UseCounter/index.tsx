@@ -8,7 +8,7 @@ import {
   UseCase,
   TitleComparison,
   Header,
-} from "@/app/useHooks/components/exports";
+} from "@/app/ReactUse/components/exports";
 
 export default function useCounterDemo() {
   return (

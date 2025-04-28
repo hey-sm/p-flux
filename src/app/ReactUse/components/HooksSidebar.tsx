@@ -7,10 +7,12 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { HOOKS } from "@/config/useHooksMenu";
+import { SIDEBAR_MENU } from "@/config/ReactUseMenu";
 
 // 按类别对 hooks 进行分组
-const CATEGORIES = Array.from(new Set(HOOKS.map((hook) => hook.category)));
+const CATEGORIES = Array.from(
+  new Set(SIDEBAR_MENU.map((hook) => hook.category))
+);
 
 export default function HooksSidebar() {
   const pathname = usePathname();
@@ -18,24 +20,6 @@ export default function HooksSidebar() {
   const [searchVisible, setSearchVisible] = React.useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
-
-  // 过滤 hooks
-  const filteredHooks = HOOKS.filter(
-    (hook) =>
-      hook.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      hook.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // 按类别分组
-  const hooksByCategory = CATEGORIES.map((category) => {
-    const hooksInCategory = filteredHooks.filter(
-      (hook) => hook.category === category
-    );
-    return {
-      category,
-      hooks: hooksInCategory,
-    };
-  }).filter((group) => group.hooks.length > 0);
 
   // 切换搜索框显示/隐藏
   const toggleSearch = () => {
@@ -78,7 +62,7 @@ export default function HooksSidebar() {
       {/* 侧边栏标题 */}
       <div className="flex items-center p-4 border-b justify-between">
         <Link href="/useHooks">
-          <h2 className="text-lg font-semibold">useHooks-ts</h2>
+          <h2 className="text-lg font-semibold">React-use</h2>
         </Link>
         <button
           onClick={toggleSearch}
@@ -108,7 +92,7 @@ export default function HooksSidebar() {
       {/* Hooks 列表 */}
       <ScrollArea className="flex-1">
         <div className="px-2 py-2">
-          {hooksByCategory.map((group) => (
+          {SIDEBAR_MENU.map((group) => (
             <div key={group.category} className="mb-4">
               <h3 className="text-xs font-semibold text-muted-foreground px-2 mb-1">
                 {group.category}
@@ -116,11 +100,11 @@ export default function HooksSidebar() {
               <div className="space-y-1">
                 {group.hooks.map((hook) => (
                   <Link
-                    key={hook.id}
-                    href={`/useHooks/${hook.id}`}
+                    key={hook.name}
+                    href={`/ReactUse/${hook.name}`}
                     className={cn(
                       "block rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground",
-                      pathname === `/useHooks/${hook.id}`
+                      pathname === `/ReactUse/${hook.name}`
                         ? "bg-accent text-accent-foreground font-medium"
                         : "text-muted-foreground"
                     )}

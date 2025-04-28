@@ -17,10 +17,10 @@ export default function UseHooksPage() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="space-y-4">
         <h1 className="text-3xl font-bold tracking-tight">
-          useHooks-ts 示例集合
+          React-use 示例集合
         </h1>
         <p className="text-lg text-muted-foreground">
-          探索 usehooks-ts 库提供的实用 React Hooks，包含互动示例和代码片段。
+          探索 React-use 库提供的实用 React Hooks，包含互动示例和代码片段。
         </p>
       </div>
 
@@ -130,12 +130,12 @@ export default function UseHooksPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>关于 usehooks-ts</CardTitle>
+          <CardTitle>关于 React-use</CardTitle>
           <CardDescription>高质量的 TypeScript React Hooks 库</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            usehooks-ts 是一个开源的 TypeScript React Hooks
+            React-use 是一个开源的 TypeScript React Hooks
             库，提供了大量开箱即用的 Hooks，
             帮助开发者解决常见问题，提高开发效率。所有 Hooks
             都经过类型检查和测试， 可以在生产环境中安全使用。
@@ -144,7 +144,7 @@ export default function UseHooksPage() {
         <CardFooter>
           <Button asChild>
             <a
-              href="https://usehooks-ts.com"
+              href="https://github.com/streamich/react-use"
               target="_blank"
               rel="noopener noreferrer"
             >
