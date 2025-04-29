@@ -1,6 +1,6 @@
 export const CODE_EXAMPLES = {
   // 原生实现代码
-  MyHooks: `
+  customHooks: `
 // 原生React实现的useToggle钩子 - 模仿react-use
 function useToggle(initialValue = false) {
   const [value, setValue] = useState(initialValue);

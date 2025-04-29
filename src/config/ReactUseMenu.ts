@@ -23,33 +23,8 @@ export const SIDEBAR_MENU = [
     hooks: [
       { name: "useToggle", description: "管理布尔值状态" },
       { name: "useCounter", description: "管理数字计数器状态" },
-      { name: "useNumber", description: "管理数字状态，带选项" },
-      { name: "useGetSet", description: "返回 [getState, setState] 数组" },
-      { name: "useGetSetState", description: "用于对象状态的 getter/setter" },
-      {
-        name: "useSetState",
-        description: "合并式更新对象状态 (类似 class component setState)",
-      },
-      { name: "usePrevious", description: "追踪上一次渲染时的 props 或 state" },
-      { name: "useStateList", description: "在数组状态中循环切换" },
       { name: "useList", description: "管理数组状态的便捷操作" },
-      { name: "useMap", description: "管理 Map 数据结构状态" },
-      { name: "useSet", description: "管理 Set 数据结构状态" },
-      { name: "useQueue", description: "管理队列状态" },
-      { name: "useStateValidator", description: "带验证逻辑的状态管理" },
-      { name: "useStateHistory", description: "带历史记录（撤销/重做）的状态" },
-      { name: "useLocalStorage", description: "将状态同步到 localStorage" },
-      { name: "useSessionStorage", description: "将状态同步到 sessionStorage" },
-      { name: "useCookie", description: "管理 Cookie 状态" },
-      {
-        name: "useDefault",
-        description: "当状态为 null/undefined 时提供默认值",
-      },
-      {
-        name: "createGlobalState",
-        description: "创建可在组件间共享的全局状态",
-      },
-      { name: "useRendersCount", description: "计算组件渲染次数" },
+      { name: "useObservable", description: "管理可观察对象状态" },
     ],
   },
   {
@@ -87,7 +62,6 @@ export const SIDEBAR_MENU = [
       { name: "useCopyToClipboard", description: "复制文本到剪贴板" },
     ],
   },
-
   {
     category: "Side Effects", // 管理异步操作、订阅等副作用的 Hook
     hooks: [

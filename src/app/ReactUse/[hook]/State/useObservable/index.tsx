@@ -10,17 +10,24 @@ import {
   Header,
 } from "@/app/ReactUse/components/exports";
 
-export default function useToggleDemo() {
+// 场景类型定义
+interface Scenario {
+  title: string;
+  example: React.ReactNode;
+  code: string;
+}
+
+export default function useObservableDemo() {
   // 收集所有场景标题
-  const titles = Examples.map((scenario) => scenario.title);
+  const titles = Examples.map((scenario: Scenario) => scenario.title);
 
   return (
     <div className="space-y-8">
       {/* 标题部分 */}
       <Header
-        name={"useToggle"}
+        name={"useObservable"}
         description={
-          "react-use库提供的布尔状态管理Hook，以数组形式返回状态和控制方法"
+          "react-use库提供的Observable状态管理Hook，用于响应式编程，连接RxJS与React组件"
         }
         Badges={titles}
       />
@@ -29,8 +36,8 @@ export default function useToggleDemo() {
         beforeCode={CODE_EXAMPLES.customHooks}
         afterCode={CODE_EXAMPLES.hooks}
       />
-      {/* 场景示例部分 - 确保 ID 仍然使用导入的 generateId 生成 */}
-      {Examples.map((scenario) => (
+      {/* 场景示例部分 */}
+      {Examples.map((scenario: Scenario) => (
         <div key={scenario.title} id={scenario.title}>
           <UseCase title={scenario.title} codeExample={scenario.code}>
             {scenario.example}
