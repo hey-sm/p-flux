@@ -18,14 +18,14 @@ export default function Page() {
     <div className="space-y-8">
       {/* 标题部分 */}
       <Header
-        name="useEvent"
-        description="React-Use 提供的 useEvent 钩子是一个用于管理DOM事件的工具，能简化事件监听器的添加和移除，避免内存泄漏和重复代码。"
+        name="useHover"
+        description="React-Use 提供的 useHover 钩子是一个用于检测元素悬停状态的工具，能够简化悬停交互的实现，无需手动管理事件监听器。"
         Badges={titles}
       />
 
       {/* 原生实现部分 */}
       <TitleComparison
-        beforeCode={CODE_EXAMPLES.traditional}
+        beforeCode={CODE_EXAMPLES.customHook}
         afterCode={CODE_EXAMPLES.hook}
       />
 
@@ -37,10 +37,7 @@ export default function Page() {
             <UseCase title={example.title} codeExample={example.code}>
               <div className="p-4 border rounded-md min-h-[120px] flex items-center justify-center relative">
                 <div className="absolute top-2 left-2 text-xs text-muted-foreground">
-                  {example.title === "鼠标跟踪" && "鼠标在组件内移动"}
-                  {example.title === "键盘事件监听" && "按下键盘任意键"}
-                  {example.title === "窗口大小监听" &&
-                    "调整浏览器窗口大小查看变化"}
+                  将鼠标悬停在元素上查看效果
                 </div>
                 {example.example}
               </div>

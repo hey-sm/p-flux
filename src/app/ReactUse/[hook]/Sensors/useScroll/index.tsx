@@ -18,14 +18,14 @@ export default function Page() {
     <div className="space-y-8">
       {/* 标题部分 */}
       <Header
-        name="useEvent"
-        description="React-Use 提供的 useEvent 钩子是一个用于管理DOM事件的工具，能简化事件监听器的添加和移除，避免内存泄漏和重复代码。"
+        name="useScroll"
+        description="React-Use 提供的 useScroll 钩子用于跟踪DOM元素的滚动位置，能够简化滚动事件的处理，自动更新滚动坐标状态。"
         Badges={titles}
       />
 
       {/* 原生实现部分 */}
       <TitleComparison
-        beforeCode={CODE_EXAMPLES.traditional}
+        beforeCode={CODE_EXAMPLES.customHook}
         afterCode={CODE_EXAMPLES.hook}
       />
 
@@ -37,10 +37,7 @@ export default function Page() {
             <UseCase title={example.title} codeExample={example.code}>
               <div className="p-4 border rounded-md min-h-[120px] flex items-center justify-center relative">
                 <div className="absolute top-2 left-2 text-xs text-muted-foreground">
-                  {example.title === "鼠标跟踪" && "鼠标在组件内移动"}
-                  {example.title === "键盘事件监听" && "按下键盘任意键"}
-                  {example.title === "窗口大小监听" &&
-                    "调整浏览器窗口大小查看变化"}
+                  滚动内容查看效果
                 </div>
                 {example.example}
               </div>

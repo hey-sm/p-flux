@@ -28,29 +28,15 @@ export default function Page() {
     <div className="space-y-8">
       {/* 标题部分 */}
       <Header
-        name="createBreakpoint"
-        description="React-Use 提供的 createBreakpoint 钩子是一个用于响应式设计的工具，可以根据窗口大小自动切换不同的断点值，支持自定义断点。"
+        name="useIntersection"
+        description="React-Use 提供的 useIntersection 钩子基于 Intersection Observer API，用于检测元素是否进入视口，常用于图片懒加载、无限滚动等场景。"
         Badges={titles}
       />
-      <div className="text-sm text-slate-500">
-        <b> useMedia：</b>
-        <br />
-        更通用。可以监听任意媒体条件,不仅仅是宽度变化。关注的是条件成立与否（true/false）。
-        <br />
-        它允许你在 JavaScript/React
-        中直接监听媒体查询的变化，比如屏幕宽度、高度、颜色模式（亮/暗）、设备类型等，并根据匹配结果做出响应。
-        <br />
-        <br />
-        <b> createBreakpoint：</b>
-        <br />
-        只根据屏幕宽度变化来决定「当前在哪个断点区间」。关注的是匹配到了哪个断点名字（比如
-        &quot;md&quot;、&quot;lg&quot;）。
-      </div>
 
       {/* 原生实现部分 */}
       <TitleComparison
-        beforeCode={CODE_EXAMPLES.MyHooks}
-        afterCode={CODE_EXAMPLES.hooks}
+        beforeCode={CODE_EXAMPLES.customHook}
+        afterCode={CODE_EXAMPLES.hook}
       />
 
       {/* 场景示例部分 */}
@@ -59,7 +45,15 @@ export default function Page() {
         {Examples.map((example) => (
           <div key={example.title} id={example.title}>
             <UseCase title={example.title} codeExample={example.code}>
-              {example.example}
+              <div className="p-4 border rounded-md min-h-[120px] flex items-center justify-center relative">
+                <div className="absolute top-2 left-2 text-xs text-muted-foreground">
+                  {example.title === "元素可见性检测" &&
+                    "滚动页面观察元素状态变化"}
+                  {example.title === "图片懒加载" && "滚动页面使图片进入视图"}
+                  {example.title === "无限滚动" && "向下滚动加载更多内容"}
+                </div>
+                {example.example}
+              </div>
             </UseCase>
           </div>
         ))}

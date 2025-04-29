@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useCounter } from "usehooks-ts";
+import { useCounter } from "react-use";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -24,19 +24,19 @@ import { CODE_EXAMPLES } from "./NativeImplementation";
 
 // 基本计数器组件
 function BasicCounter() {
-  const { count, increment, decrement, reset, setCount } = useCounter(0);
+  const [count, { inc, dec, reset, set }] = useCounter(0);
   const [step, setStep] = React.useState(1);
 
-  // 步长增减函数 - 使用 setCount 直接更新值
+  // 步长增减函数 - 使用 set 直接更新值
   const handleIncrement = () => {
-    setCount((x) => x + step);
+    set(count + step);
   };
 
   const handleDecrement = () => {
-    setCount((x) => x - step);
+    set(count - step);
   };
 
-  const handleSetCount = (value: number) => setCount(value);
+  const handleSetCount = (value: number) => set(value);
   const handleStepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     setStep(isNaN(value) ? 1 : value);
@@ -61,7 +61,12 @@ function BasicCounter() {
             <MinusIcon className="h-4 w-4" />
           </Button>
 
-          <Button variant="default" size="icon" onClick={reset} title="重置">
+          <Button
+            variant="default"
+            size="icon"
+            onClick={() => reset()}
+            title="重置"
+          >
             <RotateCcwIcon className="h-4 w-4" />
           </Button>
 
@@ -122,7 +127,7 @@ function BasicCounter() {
 // 分页控件
 function PaginationExample() {
   const totalPages = 10;
-  const { count: currentPage, setCount: setPage } = useCounter(1);
+  const [currentPage, { set: setPage }] = useCounter(1);
 
   // 确保页码在有效范围内
   const goToPage = (page: number) => {
@@ -264,50 +269,70 @@ function PaginationExample() {
 
 // 商品数量选择器
 function QuantitySelector() {
-  const {
-    count: quantity,
-    increment,
-    decrement,
-    setCount: setQuantity,
-  } = useCounter(1);
-  const [price, setPrice] = useState(99.9);
+  const [quantity1, { inc: inc1, dec: dec1, set: setQuantity1 }] =
+    useCounter(1);
+  const [quantity2, { inc: inc2, dec: dec2, set: setQuantity2 }] =
+    useCounter(1);
+  const [price1] = useState(99.9);
+  const [price2] = useState(199.5);
   const maxQuantity = 10;
 
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      decrement();
+  const handleDecrement1 = () => {
+    if (quantity1 > 1) {
+      dec1();
     }
   };
 
-  const handleIncrement = () => {
-    if (quantity < maxQuantity) {
-      increment();
+  const handleIncrement1 = () => {
+    if (quantity1 < maxQuantity) {
+      inc1();
     }
   };
 
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     if (!isNaN(value) && value >= 1 && value <= maxQuantity) {
-      setQuantity(value);
+      setQuantity1(value);
     }
   };
+
+  const handleDecrement2 = () => {
+    if (quantity2 > 1) {
+      dec2();
+    }
+  };
+
+  const handleIncrement2 = () => {
+    if (quantity2 < maxQuantity) {
+      inc2();
+    }
+  };
+
+  const handleQuantityChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value >= 1 && value <= maxQuantity) {
+      setQuantity2(value);
+    }
+  };
+
+  // 计算总价
+  const totalPrice = price1 * quantity1 + price2 * quantity2;
 
   return (
     <>
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
+        {/* 商品1 */}
+        <div className="flex items-center justify-between border-b pb-4">
           <div className="flex items-center gap-2">
-            <img
-              src="https://placehold.co/60x60/f3f4f6/6b7280"
-              alt="商品图片"
-              className="rounded-md"
-            />
+            <div className="w-14 h-14 bg-slate-100 rounded-md flex items-center justify-center text-slate-400 text-xs">
+              手表图
+            </div>
             <div>
               <h4 className="text-sm font-medium">智能手表 Pro</h4>
               <p className="text-xs text-muted-foreground">黑色 / 42mm</p>
             </div>
           </div>
-          <div className="font-semibold">¥ {price.toFixed(2)}</div>
+          <div className="font-semibold">¥ {price1.toFixed(2)}</div>
         </div>
 
         <div className="flex justify-between items-center">
@@ -317,16 +342,16 @@ function QuantitySelector() {
               variant="ghost"
               size="icon"
               className="h-8 w-8 rounded-none"
-              onClick={handleDecrement}
-              disabled={quantity <= 1}
+              onClick={handleDecrement1}
+              disabled={quantity1 <= 1}
             >
               <MinusIcon className="h-3 w-3" />
             </Button>
 
             <Input
               type="number"
-              value={quantity}
-              onChange={handleQuantityChange}
+              value={quantity1}
+              onChange={handleQuantityChange1}
               className="h-8 w-12 border-0 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               min={1}
               max={maxQuantity}
@@ -336,94 +361,79 @@ function QuantitySelector() {
               variant="ghost"
               size="icon"
               className="h-8 w-8 rounded-none"
-              onClick={handleIncrement}
-              disabled={quantity >= maxQuantity}
+              onClick={handleIncrement1}
+              disabled={quantity1 >= maxQuantity}
             >
               <PlusIcon className="h-3 w-3" />
             </Button>
           </div>
         </div>
 
-        <div className="flex justify-between items-center pt-2 border-t">
+        {/* 商品2 */}
+        <div className="flex items-center justify-between border-b pb-4 pt-4">
+          <div className="flex items-center gap-2">
+            <div className="w-14 h-14 bg-slate-100 rounded-md flex items-center justify-center text-slate-400 text-xs">
+              耳机图
+            </div>
+            <div>
+              <h4 className="text-sm font-medium">无线耳机 Mini</h4>
+              <p className="text-xs text-muted-foreground">白色 / 主动降噪</p>
+            </div>
+          </div>
+          <div className="font-semibold">¥ {price2.toFixed(2)}</div>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <div className="text-sm">数量：</div>
+          <div className="flex items-center border rounded-md">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-none"
+              onClick={handleDecrement2}
+              disabled={quantity2 <= 1}
+            >
+              <MinusIcon className="h-3 w-3" />
+            </Button>
+
+            <Input
+              type="number"
+              value={quantity2}
+              onChange={handleQuantityChange2}
+              className="h-8 w-12 border-0 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              min={1}
+              max={maxQuantity}
+            />
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-none"
+              onClick={handleIncrement2}
+              disabled={quantity2 >= maxQuantity}
+            >
+              <PlusIcon className="h-3 w-3" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center pt-4 border-t mt-2">
           <div className="text-sm font-medium">总计：</div>
-          <div className="font-bold text-lg">
-            ¥ {(price * quantity).toFixed(2)}
-          </div>
+          <div className="font-bold text-lg">¥ {totalPrice.toFixed(2)}</div>
         </div>
       </div>
 
       <div className="bg-muted p-3 rounded-md mt-4">
         <p className="text-xs font-medium">
-          数量：{quantity}，单价：¥{price.toFixed(2)}，总价：¥
-          {(price * quantity).toFixed(2)}
+          商品1：{quantity1} × ¥{price1.toFixed(2)} = ¥
+          {(price1 * quantity1).toFixed(2)}
         </p>
-      </div>
-    </>
-  );
-}
-
-// 评分组件
-function RatingComponent() {
-  const { count: rating, setCount: setRating } = useCounter(0);
-  const maxRating = 5;
-
-  const handleRatingClick = (value: number) => {
-    setRating(value);
-  };
-
-  const renderStars = () => {
-    const stars = [];
-
-    for (let i = 1; i <= maxRating; i++) {
-      stars.push(
-        <Button
-          key={i}
-          variant="ghost"
-          size="icon"
-          className="h-10 w-10"
-          onClick={() => handleRatingClick(i)}
-        >
-          <StarIcon
-            className={`h-6 w-6 ${
-              i <= rating
-                ? "fill-yellow-400 text-yellow-400"
-                : "text-muted-foreground"
-            }`}
-          />
-        </Button>
-      );
-    }
-
-    return stars;
-  };
-
-  const ratingTexts = ["未评分", "很差", "较差", "一般", "不错", "很棒"];
-
-  return (
-    <>
-      <div className="flex flex-col items-center gap-4">
-        <h4 className="text-sm font-medium">请为我们的服务评分</h4>
-
-        <div className="flex items-center">{renderStars()}</div>
-
-        <div className="h-6">
-          {rating > 0 && (
-            <Badge variant={rating > 3 ? "default" : "secondary"}>
-              {ratingTexts[rating]}
-            </Badge>
-          )}
-        </div>
-
-        {rating > 0 && (
-          <div className="w-full">
-            <Input placeholder="请输入您的评价（可选）" className="w-full" />
-          </div>
-        )}
-      </div>
-
-      <div className="bg-muted p-3 rounded-md mt-4">
         <p className="text-xs font-medium">
-          当前评分：{rating} / {maxRating}，评价：{ratingTexts[rating]}
+          商品2：{quantity2} × ¥{price2.toFixed(2)} = ¥
+          {(price2 * quantity2).toFixed(2)}
+        </p>
+        <p className="text-xs font-medium mt-1 pt-1 border-t">
+          总价：¥{totalPrice.toFixed(2)}
         </p>
       </div>
     </>
@@ -433,73 +443,72 @@ function RatingComponent() {
 // 各种使用场景示例代码
 const SCENARIO_CODE = {
   BasicCounterCode: `
-import { useCounter } from 'usehooks-ts';
+import { useCounter } from 'react-use';
 
 function BasicCounter() {
-  const { count, increment, decrement, reset, setCount } = useCounter(0);
+  const [count, { inc, dec, reset, set }] = useCounter(0);
   
   // 自定义步长增减
-  const incrementBy5 = () => setCount(x => x + 5);
+  const incrementBy5 = () => set(count + 5);
   
   return (
     <div>
       <p>当前计数: {count}</p>
-      <button onClick={increment}>+1</button>
+      <button onClick={inc}>+1</button>
       <button onClick={incrementBy5}>+5</button>
-      <button onClick={decrement}>-1</button>
+      <button onClick={dec}>-1</button>
       <button onClick={reset}>重置</button>
-      <button onClick={() => setCount(100)}>设为 100</button>
+      <button onClick={() => set(100)}>设为 100</button>
     </div>
   );
 }
 `,
   PaginationCode: `
-  function Pagination({ totalPages = 10 }) {
-    const { count: page, setCount: setPage } = useCounter(1);
-    
-    // 确保页码在有效范围内
-    const goToPage = (p) => {
-      if (p >= 1 && p <= totalPages) {
-        setPage(p);
-      }
-    };
-    
-    return (
-      <div>
-        <button onClick={() => goToPage(page - 1)} disabled={page === 1}>上一页</button>
-        <span>第 {page} 页，共 {totalPages} 页</span>
-        <button onClick={() => goToPage(page + 1)} disabled={page === totalPages}>下一页</button>
-      </div>
-    );
-  }
-  `,
-  QuantitySelectorCode: `
-function QuantitySelector({ maxQuantity = 10, price = 99.9 }) {
-  const { count: quantity, increment, decrement } = useCounter(1);
+import { useCounter } from 'react-use';
+
+function Pagination({ totalPages = 10 }) {
+  const [page, { set: setPage }] = useCounter(1);
+  
+  // 确保页码在有效范围内
+  const goToPage = (p) => {
+    if (p >= 1 && p <= totalPages) {
+      setPage(p);
+    }
+  };
   
   return (
     <div>
-      <button onClick={decrement} disabled={quantity <= 1}>-</button>
-      <span>{quantity}</span>
-      <button onClick={increment} disabled={quantity >= maxQuantity}>+</button>
-      <p>总价: ¥{quantity * price}</p>
+      <button onClick={() => goToPage(page - 1)} disabled={page === 1}>上一页</button>
+      <span>第 {page} 页，共 {totalPages} 页</span>
+      <button onClick={() => goToPage(page + 1)} disabled={page === totalPages}>下一页</button>
     </div>
   );
 }
-`,
-  RatingCode: `
-function Rating() {
-  const { count: rating, setCount: setRating } = useCounter(0);
-  const maxRating = 5;
+  `,
+  QuantitySelectorCode: `
+import { useCounter } from 'react-use';
+
+function QuantitySelector({ maxQuantity = 10, price = 99.9 }) {
+  const [quantity, { inc, dec }] = useCounter(1);
+  
+  const handleIncrement = () => {
+    if (quantity < maxQuantity) {
+      inc();
+    }
+  };
+  
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      dec();
+    }
+  };
   
   return (
     <div>
-      {[1, 2, 3, 4, 5].map(value => (
-        <button key={value} onClick={() => setRating(value)}>
-          {value <= rating ? '★' : '☆'}
-        </button>
-      ))}
-      <p>您的评分: {rating}/5</p>
+      <button onClick={handleDecrement} disabled={quantity <= 1}>-</button>
+      <span>{quantity}</span>
+      <button onClick={handleIncrement} disabled={quantity >= maxQuantity}>+</button>
+      <p>总价: ¥{quantity * price}</p>
     </div>
   );
 }
@@ -521,10 +530,5 @@ export const Examples = [
     title: "商品数量选择器",
     example: <QuantitySelector />,
     code: SCENARIO_CODE.QuantitySelectorCode,
-  },
-  {
-    title: "评分组件",
-    example: <RatingComponent />,
-    code: SCENARIO_CODE.RatingCode,
   },
 ];

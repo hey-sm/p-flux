@@ -10,7 +10,7 @@ import {
   Header,
 } from "@/app/ReactUse/components/exports";
 
-export default function UseBooleanDemo() {
+export default function useToggleDemo() {
   // 收集所有场景标题
   const titles = Examples.map((scenario) => scenario.title);
 
@@ -18,7 +18,7 @@ export default function UseBooleanDemo() {
     <div className="space-y-8">
       {/* 标题部分 */}
       <Header
-        name={"useBoolean"}
+        name={"useToggle"}
         description={
           "react-use库提供的布尔状态管理Hook，以数组形式返回状态和控制方法"
         }

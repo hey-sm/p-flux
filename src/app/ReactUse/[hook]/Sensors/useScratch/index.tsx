@@ -13,19 +13,18 @@ import {
 export default function Page() {
   // 收集所有场景标题
   const titles = Examples.map((example) => example.title);
-
   return (
     <div className="space-y-8">
       {/* 标题部分 */}
       <Header
-        name="useEvent"
-        description="React-Use 提供的 useEvent 钩子是一个用于管理DOM事件的工具，能简化事件监听器的添加和移除，避免内存泄漏和重复代码。"
+        name="useScratch"
+        description="React-Use 提供的 useScratch 钩子用于检测拖拽和刮擦手势，可用于签名板、拖拽排序等交互场景。"
         Badges={titles}
       />
 
       {/* 原生实现部分 */}
       <TitleComparison
-        beforeCode={CODE_EXAMPLES.traditional}
+        beforeCode={CODE_EXAMPLES.customHook}
         afterCode={CODE_EXAMPLES.hook}
       />
 
@@ -37,10 +36,8 @@ export default function Page() {
             <UseCase title={example.title} codeExample={example.code}>
               <div className="p-4 border rounded-md min-h-[120px] flex items-center justify-center relative">
                 <div className="absolute top-2 left-2 text-xs text-muted-foreground">
-                  {example.title === "鼠标跟踪" && "鼠标在组件内移动"}
-                  {example.title === "键盘事件监听" && "按下键盘任意键"}
-                  {example.title === "窗口大小监听" &&
-                    "调整浏览器窗口大小查看变化"}
+                  {example.title === "签名板" && "在区域内拖动进行签名"}
+                  {example.title === "拖拽排序列表" && "拖拽列表项进行重排序"}
                 </div>
                 {example.example}
               </div>

@@ -2,9 +2,16 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useEvent } from "react-use";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 
 // 鼠标跟踪示例
-export function MouseTracker() {
+function MouseTracker() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   // 使用useEvent监听鼠标移动
@@ -25,7 +32,7 @@ export function MouseTracker() {
 }
 
 // 键盘事件监听示例
-export function KeyboardListener() {
+function KeyboardListener() {
   const [lastKey, setLastKey] = useState("");
   const [keys, setKeys] = useState<string[]>([]);
 
@@ -58,70 +65,47 @@ export function KeyboardListener() {
   );
 }
 
-// 元素大小监听示例
-export function ElementResizer() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState({ width: 0, height: 0 });
+// 窗口大小监听示例
+function WindowResizer() {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 0,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
+  });
 
   useEvent(
     "resize",
     () => {
-      if (containerRef.current) {
-        setSize({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight,
-        });
-      }
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     },
     window
   );
 
   // 初始化
   useEffect(() => {
-    if (containerRef.current) {
-      setSize({
-        width: containerRef.current.offsetWidth,
-        height: containerRef.current.offsetHeight,
-      });
-    }
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
   }, []);
 
   return (
-    <div className="p-4 border rounded-md" ref={containerRef}>
+    <div className="p-4 border rounded-md">
       <p>
-        元素大小: 宽度: {size.width}px, 高度: {size.height}px
+        窗口大小: 宽度: {windowSize.width}px, 高度: {windowSize.height}px
       </p>
     </div>
   );
 }
 
-// 导出场景示例组件
-export function Scenarios() {
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold">useEvent 使用场景示例</h2>
-
-      <div>
-        <h3 className="text-lg font-medium mb-2">鼠标跟踪</h3>
-        <MouseTracker />
-      </div>
-
-      <div>
-        <h3 className="text-lg font-medium mb-2">键盘事件监听</h3>
-        <KeyboardListener />
-      </div>
-
-      <div>
-        <h3 className="text-lg font-medium mb-2">窗口大小变化监听</h3>
-        <ElementResizer />
-      </div>
-    </div>
-  );
-}
-
-// 导出示例代码
-export const EXAMPLES = {
-  mouseTracker: `const MouseTracker = () => {
+// 导出示例组件
+export const Examples = [
+  {
+    title: "鼠标跟踪",
+    example: <MouseTracker />,
+    code: `const MouseTracker = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   // 使用useEvent监听鼠标移动
@@ -138,8 +122,11 @@ export const EXAMPLES = {
     </div>
   );
 };`,
-
-  keyboardListener: `const KeyboardListener = () => {
+  },
+  {
+    title: "键盘事件监听",
+    example: <KeyboardListener />,
+    code: `const KeyboardListener = () => {
   const [lastKey, setLastKey] = useState("");
 
   // 使用useEvent监听键盘按下事件
@@ -153,34 +140,36 @@ export const EXAMPLES = {
     </div>
   );
 };`,
-
-  elementResizer: `const ElementResizer = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  },
+  {
+    title: "窗口大小监听",
+    example: <WindowResizer />,
+    code: `const WindowResizer = () => {
+  const [windowSize, setWindowSize] = useState({ 
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0 
+  });
 
   useEvent('resize', () => {
-    if (containerRef.current) {
-      setSize({
-        width: containerRef.current.offsetWidth,
-        height: containerRef.current.offsetHeight,
-      });
-    }
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
   }, window);
 
   // 初始化
   useEffect(() => {
-    if (containerRef.current) {
-      setSize({
-        width: containerRef.current.offsetWidth,
-        height: containerRef.current.offsetHeight,
-      });
-    }
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
   }, []);
 
   return (
-    <div ref={containerRef}>
-      <p>元素大小: 宽度: {size.width}px, 高度: {size.height}px</p>
+    <div>
+      <p>窗口大小: 宽度: {windowSize.width}px, 高度: {windowSize.height}px</p>
     </div>
   );
 };`,
-};
+  },
+];
