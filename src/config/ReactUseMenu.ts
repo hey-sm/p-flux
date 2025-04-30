@@ -28,6 +28,20 @@ export const SIDEBAR_MENU = [
     ],
   },
   {
+    categoryCn: "副作用",
+    category: "SideEffects", // 管理异步操作、订阅等副作用的 Hook
+    hooks: [
+      { name: "useAsync", description: "管理异步函数调用状态 (简单版)" },
+      { name: "useBeforeUnload", description: "在用户离开页面前触发提示" },
+      { name: "useCookie", description: "管理 Cookie 状态" },
+      {
+        name: "useCopyToClipboard",
+        description: "复制文本到剪贴板 (也属于UI)",
+      },
+      { name: "useDebounce", description: "对值或函数进行防抖处理" },
+    ],
+  },
+  {
     category: "UI", // 用户界面交互和元素相关的 Hook
     hooks: [
       { name: "useClickAway", description: "检测元素外部的点击事件" },
@@ -59,54 +73,9 @@ export const SIDEBAR_MENU = [
       { name: "useWindowSize", description: "追踪窗口的尺寸" },
       { name: "useMeasure", description: "测量 DOM 节点的尺寸和位置" },
       { name: "useTextSelection", description: "获取用户选择的文本内容和位置" },
-      { name: "useCopyToClipboard", description: "复制文本到剪贴板" },
     ],
   },
-  {
-    category: "Side Effects", // 管理异步操作、订阅等副作用的 Hook
-    hooks: [
-      { name: "useAsync", description: "管理异步函数调用状态 (简单版)" },
-      { name: "useAsyncFn", description: "返回异步函数及其状态/结果" },
-      { name: "useAsyncRetry", description: "带自动重试功能的 useAsync" },
-      { name: "useBeforeUnload", description: "在用户离开页面前触发提示" },
-      {
-        name: "useCopyToClipboard",
-        description: "复制文本到剪贴板 (也属于UI)",
-      }, // 重复出现，因为它跨领域
-      { name: "useDebounce", description: "对值或函数进行防抖处理" },
-      {
-        name: "useDeepCompareEffect",
-        description: "依赖项进行深比较的 useEffect",
-      },
-      { name: "useEvent", description: "为 window 或 DOM 元素添加事件监听" },
-      { name: "useFavicon", description: "动态设置网站 favicon" },
-      {
-        name: "useFetch",
-        description: "执行 fetch 请求 (较旧，推荐 useAsync)",
-      },
-      { name: "useInterval", description: "运行定时器 (setInterval)" },
-      { name: "useIsClient", description: "判断当前是否在客户端环境" },
-      { name: "useLocationHash", description: "管理 URL hash" },
-      { name: "useLogger", description: "在组件生命周期和渲染时打印日志" },
-      { name: "usePromise", description: "追踪 Promise 状态" },
-      {
-        name: "useRaf",
-        description: "在 requestAnimationFrame 循环中执行函数 (单次)",
-      },
-      { name: "useRafLoop", description: "管理 requestAnimationFrame 循环" },
-      { name: "useSearchParam", description: "获取 URL 查询参数" },
-      { name: "useThrottle", description: "对值进行节流处理" },
-      { name: "useThrottleFn", description: "对函数进行节流处理" },
-      { name: "useTimeout", description: "运行延时器 (setTimeout)" },
-      { name: "useTimeoutFn", description: "返回可控的延时函数" },
-      {
-        name: "useTitle",
-        description: "动态设置页面标题 (document.title) (也属于UI)",
-      }, // 重复出现
-      { name: "useUpdate", description: "提供一个函数来强制组件重新渲染" },
-      { name: "useWebSocket", description: "管理 WebSocket 连接" },
-    ],
-  },
+
   {
     category: "Lifecycles", // 与组件生命周期相关的 Hook
     hooks: [

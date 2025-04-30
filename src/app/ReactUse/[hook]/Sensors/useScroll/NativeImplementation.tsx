@@ -1,5 +1,3 @@
-"use client";
-
 // useScroll 钩子的原生实现示例
 export const CODE_EXAMPLES = {
   // 使用 hooks 实现滚动监听

@@ -94,13 +94,8 @@ function InteractiveHover() {
 
   return <div>{interactable}</div>;
 }
-
-// 导出示例组件
-export const Examples = [
-  {
-    title: "基础悬停效果",
-    example: <BasicHover />,
-    code: `const BasicHover = () => {
+const CODE_EXAMPLES = {
+  BasicHover: `const BasicHover = () => {
   const element = (hovered) => (
     <div className={\`p-4 border rounded \${
       hovered ? "bg-blue-100" : "bg-white"
@@ -113,11 +108,7 @@ export const Examples = [
 
   return <div>{hoverable}</div>;
 };`,
-  },
-  {
-    title: "Tooltip提示效果",
-    example: <TooltipExample />,
-    code: `const TooltipExample = () => {
+  TooltipExample: `const TooltipExample = () => {
   const tooltipTrigger = (hovered) => (
     <div className="relative inline-block">
       <button className="px-4 py-2 bg-slate-800 text-white rounded-md">
@@ -136,11 +127,7 @@ export const Examples = [
 
   return <div>{tooltipElement}</div>;
 };`,
-  },
-  {
-    title: "交互式悬停效果",
-    example: <InteractiveHover />,
-    code: `const InteractiveHover = () => {
+  InteractiveHover: `const InteractiveHover = () => {
   const [count, setCount] = useState(0);
 
   const interactiveElement = (hovered) => (
@@ -166,5 +153,22 @@ export const Examples = [
 
   return <div>{interactable}</div>;
 };`,
+};
+// 导出示例组件
+export const Examples = [
+  {
+    title: "基础悬停效果",
+    example: <BasicHover />,
+    code: CODE_EXAMPLES.BasicHover,
+  },
+  {
+    title: "Tooltip提示效果",
+    example: <TooltipExample />,
+    code: CODE_EXAMPLES.TooltipExample,
+  },
+  {
+    title: "交互式悬停效果",
+    example: <InteractiveHover />,
+    code: CODE_EXAMPLES.InteractiveHover,
   },
 ];
