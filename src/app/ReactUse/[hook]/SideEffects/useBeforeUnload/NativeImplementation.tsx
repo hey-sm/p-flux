@@ -69,22 +69,5 @@ export const useCustomBeforeUnload = (when, message) => {
     };
   }, [when, message]); // 依赖项数组
 };
-
-// 使用示例
-function FormComponent() {
-  const [isDirty, setIsDirty] = useState(false);
-
-  // 使用自定义钩子
-  useCustomBeforeUnload(
-    isDirty, 
-    '您有未保存的更改，确定要离开吗？'
-  );
-
-  return (
-    <form>
-      {/* 表单内容... */}
-      {isDirty && <p>您有未保存的更改</p>}
-    </form>
-  );
-}`,
+`,
 };

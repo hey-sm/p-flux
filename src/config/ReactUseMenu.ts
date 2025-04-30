@@ -44,6 +44,7 @@ export const SIDEBAR_MENU = [
   {
     category: "UI", // 用户界面交互和元素相关的 Hook
     hooks: [
+      { name: "useAudio", description: "管理音频播放状态" },
       { name: "useClickAway", description: "检测元素外部的点击事件" },
       { name: "useContextMenu", description: "追踪右键菜单状态" },
       { name: "useCss", description: "动态修改 CSS 变量或样式" },
