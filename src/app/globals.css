@@ -142,7 +142,6 @@
     @apply bg-background text-foreground;
   }
 }
-<<<<<<< HEAD
 
 /* 整体滚动条样式 - 使用更细的滚动条 */
 ::-webkit-scrollbar {
@@ -237,5 +236,3 @@ body {
 .animate-slideUp {
   animation: slideUp 0.8s ease-in-out;
 }
-=======
->>>>>>> 97e821f2a0fd90b91393913e26fc04f99adaad4e

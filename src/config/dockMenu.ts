@@ -1,3 +1,5 @@
+/** @format */
+
 export const menuItems = [
   {
     title: "首页",
@@ -26,7 +28,7 @@ export const menuItems = [
   },
   {
     title: "flux",
-    url: "/about",
+    url: "/fluxp",
     icon: "icon-[lucide--user]",
   },
   {
