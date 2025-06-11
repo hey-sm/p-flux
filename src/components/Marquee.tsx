@@ -20,7 +20,7 @@ const icons = [
 
 export function MarqueeDemo() {
   return (
-    <div className="relative flex w-full max-w-3xl mt-10 flex-col items-center justify-center overflow-hidden">
+    <div className="relative flex w-full  mt-10 flex-col items-center justify-center overflow-hidden">
       <Marquee reverse pauseOnHover className="[--duration:20s]">
         {icons.map((icon) => (
           <StackItem key={icon} className={icon} />
