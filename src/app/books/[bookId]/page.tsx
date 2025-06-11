@@ -5,6 +5,7 @@ import { ReactReader } from "react-reader";
 import { useParams } from "next/navigation";
 import "../reader-styles.css";
 import { useBooks, Book } from "../BooksContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // EPUB阅读器组件
 function EpubReader({
@@ -18,7 +19,6 @@ function EpubReader({
     initialLocation
   );
   const readerContainerRef = useRef<HTMLDivElement>(null);
-  console.log(book);
   // 保存阅读位置
   const locationChanged = (epubcifi: string) => {
     setLocation(epubcifi);
@@ -80,7 +80,13 @@ export default function BookPage() {
           return;
         }
 
-        // 其次从已加载的书籍列表中查找
+        // 如果books数组为空且加载中，则等待books加载完成再继续
+        if (books.length === 0 && loading) {
+          // 保持bookLoading为true，退出当前执行，等待books加载完成后的useEffect重新触发
+          return;
+        }
+
+        // 从已加载的书籍列表中查找
         if (books.length > 0) {
           const foundBook = books.find((b) => b.name === decodedBookId);
           if (foundBook) {
@@ -119,15 +125,15 @@ export default function BookPage() {
     }
 
     loadBook();
-  }, [bookId, books, preloadBook, preloadedBooks]);
+  }, [bookId, books, loading, preloadBook, preloadedBooks]);
 
   // 全局加载状态 - 书籍列表尚未加载完成
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-pulse">
-          <div className="h-4 w-32 bg-gray-200 rounded mb-2"></div>
-          <div className="h-40 w-64 bg-gray-200 rounded"></div>
+        <div>
+          <Skeleton className="h-4 w-32 mb-2" />
+          <Skeleton className="h-40 w-64" />
         </div>
       </div>
     );
@@ -146,10 +152,10 @@ export default function BookPage() {
   if (bookLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="w-full h-full bg-white/60">
-          <div className="animate-pulse flex flex-col items-center justify-center h-full">
-            <div className="h-6 w-48 bg-gray-200 rounded mb-4"></div>
-            <div className="h-[80%] w-[90%] bg-gray-100 rounded"></div>
+        <div className="w-full h-full">
+          <div className="flex flex-col items-center justify-center h-full">
+            <Skeleton className="h-6 w-48 mb-4" />
+            <Skeleton className="h-[80%] w-[90%]" />
           </div>
         </div>
       </div>

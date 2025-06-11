@@ -4,7 +4,7 @@
 @import "tw-animate-css";
 @plugin "@iconify/tailwind4";
 @import "../styles/marquee.css";
-
+@import "../styles/scrollbar.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -91,10 +91,11 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
-  --scrollbar-width: 3px; /* 更细的滚动条宽度 */
-  --scrollbar-height: 60px; /* 滚动条滑块固定长度 */
-  --scrollbar-track: transparent; /* 透明轨道 */
-  --scrollbar-thumb: rgba(136, 136, 136, 0.3); /* 半透明滑块 */
+  --scrollbar-width: 3px;
+  --scrollbar-height: 60px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(136, 136, 136, 0.1);
+  --scrollbar-thumb-hover: rgba(136, 136, 136, 0.3);
 }
 
 .dark {
@@ -129,6 +130,8 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 }
 
 @layer base {
@@ -139,6 +142,7 @@
     @apply bg-background text-foreground;
   }
 }
+<<<<<<< HEAD
 
 /* 整体滚动条样式 - 使用更细的滚动条 */
 ::-webkit-scrollbar {
@@ -233,3 +237,5 @@ body {
 .animate-slideUp {
   animation: slideUp 0.8s ease-in-out;
 }
+=======
+>>>>>>> 97e821f2a0fd90b91393913e26fc04f99adaad4e
